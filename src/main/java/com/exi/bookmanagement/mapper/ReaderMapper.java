@@ -2,8 +2,6 @@ package com.exi.bookmanagement.mapper;
 
 import com.exi.bookmanagement.entity.Reader;
 import org.apache.ibatis.annotations.*;
-import org.apache.ibatis.type.JdbcType;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -56,4 +54,8 @@ public interface ReaderMapper {
     @Select("SELECT * FROM reader WHERE reader.reader_name LIKE CONCAT('%',#{readerName},'%')")
     @ResultMap(value = "readerMap")
     List<Reader> getReaderLikeNameList(String readerName);
+
+    @Select("SELECT * FROM reader WHERE reader.reader_account = #{readerAccount} AND reader.reader_password = #{readerPassword}")
+    @ResultMap(value = "readerMap")
+    Reader selectReaderAccountAndPassword(String readerAccount, String readerPassword);
 }

@@ -51,7 +51,6 @@
         </dependency>
 
         <!-- 分页插件 -->
-
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
@@ -90,6 +89,15 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.49</version>
         </dependency>
+
+        <!-- JWT-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.7.0</version>
+        </dependency>
+
+
 
     </dependencies>
 

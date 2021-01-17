@@ -1,8 +1,11 @@
 package com.exi.bookmanagement.controller;
+
 import com.alibaba.fastjson.JSON;
 import com.exi.bookmanagement.entity.Reader;
 import com.exi.bookmanagement.mapper.ReaderMapper;
 import com.exi.bookmanagement.response.ReaderResponse;
+import com.exi.bookmanagement.service.IReaderService;
+import com.exi.bookmanagement.utils.JwtUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -12,6 +15,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
@@ -41,6 +45,9 @@ import java.util.List;
 public class ReaderController {
     @Autowired
     private ReaderMapper readerMapper;
+
+    @Autowired
+    private IReaderService readerService;
 
     @ApiOperation("分页查询读者信息")
     @GetMapping(value = "/getReadersPage/{pageNum}/{pageSize}")
@@ -149,6 +156,7 @@ public class ReaderController {
         return readerResponse;
     }
 
+    @ApiOperation("删除读者信息")
     @DeleteMapping(value="/deleteReader/{id}")
     public ReaderResponse delete(@PathVariable("id") Long id) {
         ReaderResponse readerResponse = new ReaderResponse();
@@ -167,4 +175,29 @@ public class ReaderController {
         }
         return readerResponse;
     }
+
+    @ApiOperation("读者进行登录")
+    @PostMapping(value = "/login")
+    public String login(@RequestBody Reader reader){
+        // 判空
+        if (reader == null || StringUtils.isEmpty(reader.getReaderAccount()) ||
+                StringUtils.isEmpty(reader.getReaderPassword())){
+            return "传过来的用户名或密码为空";
+        }
+        // 根据用户名、密码查询数据
+        Reader loginReader = readerService.getMemberByNicknameAndPassword(reader);
+
+        log.info("查到的读者数据：" + loginReader);
+
+        if (loginReader == null){
+            return "用户名或密码错误";
+        }else if (loginReader != null){
+            log.info("登录的读者的 id 为：", String.valueOf(loginReader.getReaderId()));
+            // 生成token
+            String jwtToken = JwtUtils.getJwtToken(loginReader.getReaderId(), loginReader.getReaderAccount());
+            return jwtToken;
+        }
+        return null;
+    }
+
 }
