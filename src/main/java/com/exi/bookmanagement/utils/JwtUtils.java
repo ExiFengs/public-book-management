@@ -91,12 +91,11 @@ public class JwtUtils {
      * @param request
      * @return
      */
-    public static String getMemberIdByJwtToken(HttpServletRequest request) {
-        String jwtToken = request.getHeader("token");
-        if(StringUtils.isEmpty(jwtToken)) return "";
+    public static Integer getMemberIdByJwtToken(HttpServletRequest request) {
+        String jwtToken = request.getParameter("token");
+        if(StringUtils.isEmpty(jwtToken)) return null;
         Jws<Claims> claimsJws = Jwts.parser().setSigningKey(APP_SECRET).parseClaimsJws(jwtToken);
         Claims claims = claimsJws.getBody();
-        return (String)claims.get("reader_id");
+        return (Integer)claims.get("reader_id");
     }
-
 }

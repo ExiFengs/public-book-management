@@ -39,6 +39,10 @@ public interface ReaderMapper {
     @ResultMap(value = "readerMap")
     Reader getOneReaderBean(Long readerId);
 
+    @Select("SELECT * FROM reader WHERE reader_id = #{readerId}")
+    @ResultMap(value = "readerMap")
+    Reader getTokenForReaderId(Integer readerId);
+
     @Insert("INSERT INTO reader(reader_name,reader_account,reader_password,registration_time,reader_sex,role_id) " +
             "VALUES(#{readerName}, #{readerAccount}, #{readerPassword}, #{registrationTime}, #{readerSex}, #{roleId})")
     @Options(useGeneratedKeys = true, keyProperty = "reader_id")

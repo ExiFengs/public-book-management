@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -178,11 +179,14 @@ public class ReaderController {
 
     @ApiOperation("读者进行登录")
     @PostMapping(value = "/login")
-    public String login(@RequestBody Reader reader){
+    public ReaderResponse login(@RequestBody Reader reader){
+        ReaderResponse readerResponse = new ReaderResponse();
         // 判空
-        if (reader == null || StringUtils.isEmpty(reader.getReaderAccount()) ||
+        if (StringUtils.isEmpty(reader.getReaderAccount()) ||
                 StringUtils.isEmpty(reader.getReaderPassword())){
-            return "传过来的用户名或密码为空";
+            readerResponse.setCode(888888);
+            readerResponse.setMessage("传过来的用户名或密码为空");
+            return readerResponse;
         }
         // 根据用户名、密码查询数据
         Reader loginReader = readerService.getMemberByNicknameAndPassword(reader);
@@ -190,14 +194,35 @@ public class ReaderController {
         log.info("查到的读者数据：" + loginReader);
 
         if (loginReader == null){
-            return "用户名或密码错误";
+            readerResponse.setCode(888888);
+            readerResponse.setMessage("用户名或密码错误");
+            return readerResponse;
         }else if (loginReader != null){
-            log.info("登录的读者的 id 为：", String.valueOf(loginReader.getReaderId()));
+            System.out.println(("登录的读者的 id 为："+loginReader.getReaderId()));
             // 生成token
             String jwtToken = JwtUtils.getJwtToken(loginReader.getReaderId(), loginReader.getReaderAccount());
-            return jwtToken;
+            System.out.println("返回的 token 为：" + jwtToken);
+            readerResponse.setReader(loginReader);
+            readerResponse.setToken(jwtToken);
+            readerResponse.setCode(20000);
+            readerResponse.setMessage("返回 date 为 jwtToken");
+            return readerResponse;
         }
         return null;
     }
 
+    @ApiOperation("前端返回 token 后台接收")
+    @GetMapping(value = "/getReaderInfo")
+    public ReaderResponse getReaderInfo(@RequestBody HttpServletRequest request){
+        log.info("这是请求{} ", request.getParameter("token"));
+        Integer readerId = JwtUtils.getMemberIdByJwtToken(request);
+        System.out.println("readerId 为：：：：：" + readerId);
+        ReaderResponse readerResponse = new ReaderResponse();
+        Reader readerBean = readerMapper.getTokenForReaderId(readerId);
+        readerResponse.setReader(readerBean);
+        readerResponse.setCode(20000);
+        readerResponse.setMessage("返回 date 为 token解析后的 readerBean");
+        log.info("这是readerResponse{} ", readerResponse);
+        return readerResponse;
+    }
 }

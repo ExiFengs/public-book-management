@@ -28,6 +28,8 @@ public class ReaderResponse implements Serializable {
     private Reader reader;
     private List<Reader> readerList;
     private PageInfo pageInfo;
+    private String token;
+
 
 
     @Override
@@ -38,6 +40,14 @@ public class ReaderResponse implements Serializable {
                 ", reader=" + reader +
                 ", pageInfo=" + pageInfo +
                 '}';
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public List<Reader> getReaderList() {
