@@ -1,8 +1,10 @@
 package com.exi.bookmanagement.service.impl;
 
+import com.exi.bookmanagement.entity.BookManager;
 import com.exi.bookmanagement.entity.Reader;
+import com.exi.bookmanagement.mapper.BookManagerMapper;
 import com.exi.bookmanagement.mapper.ReaderMapper;
-import com.exi.bookmanagement.service.IReaderService;
+import com.exi.bookmanagement.service.IUserLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,16 +23,28 @@ import org.springframework.stereotype.Service;
  * 2021/1/17    Fengsx     v1.0.0      修改原因
  */
 @Service
-public class ReaderServiceImpl implements IReaderService {
+public class UserLoginServiceImpl implements IUserLoginService {
     @Autowired
     private ReaderMapper readerMapper;
+
+    @Autowired
+    private BookManagerMapper bookManagerMapper;
     @Override
-    public Reader getMemberByNicknameAndPassword(Reader reader) {
+    public Reader getUserByNameAndPassword(Reader reader) {
         //校验读者账号和密码
         String readerAccount = reader.getReaderAccount();
         String readerPassword = reader.getReaderPassword();
         Reader reader1 = readerMapper.selectReaderAccountAndPassword(readerAccount, readerPassword);
 
         return reader1;
+    }
+
+    @Override
+    public BookManager getBookMangerByNameAndPassword(BookManager bookManager) {
+        String readerAccount = bookManager.getReaderAccount();
+        String readerPassword = bookManager.getReaderPassword();
+        BookManager bookManager1 = bookManagerMapper.selectBookManagerAccountAndPassword(readerAccount, readerPassword);
+
+        return bookManager1;
     }
 }

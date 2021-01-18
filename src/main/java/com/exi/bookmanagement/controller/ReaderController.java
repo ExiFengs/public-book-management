@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.exi.bookmanagement.entity.Reader;
 import com.exi.bookmanagement.mapper.ReaderMapper;
 import com.exi.bookmanagement.response.ReaderResponse;
-import com.exi.bookmanagement.service.IReaderService;
+import com.exi.bookmanagement.service.IUserLoginService;
 import com.exi.bookmanagement.utils.JwtUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -48,7 +48,7 @@ public class ReaderController {
     private ReaderMapper readerMapper;
 
     @Autowired
-    private IReaderService readerService;
+    private IUserLoginService readerService;
 
     @ApiOperation("分页查询读者信息")
     @GetMapping(value = "/getReadersPage/{pageNum}/{pageSize}")
@@ -189,7 +189,7 @@ public class ReaderController {
             return readerResponse;
         }
         // 根据用户名、密码查询数据
-        Reader loginReader = readerService.getMemberByNicknameAndPassword(reader);
+        Reader loginReader = readerService.getUserByNameAndPassword(reader);
 
         log.info("查到的读者数据：" + loginReader);
 

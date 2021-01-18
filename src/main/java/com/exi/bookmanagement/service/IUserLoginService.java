@@ -1,5 +1,6 @@
 package com.exi.bookmanagement.service;
 
+import com.exi.bookmanagement.entity.BookManager;
 import com.exi.bookmanagement.entity.Reader;
 
 /**
@@ -16,6 +17,9 @@ import com.exi.bookmanagement.entity.Reader;
  * ----------------------------------------------------------
  * 2021/1/17    Fengsx     v1.0.0      修改原因
  */
-public interface IReaderService {
-    Reader getMemberByNicknameAndPassword(Reader reader);
+public interface IUserLoginService {
+    Reader getUserByNameAndPassword(Reader reader);
+
+    BookManager getBookMangerByNameAndPassword(BookManager bookManager);
+
 }

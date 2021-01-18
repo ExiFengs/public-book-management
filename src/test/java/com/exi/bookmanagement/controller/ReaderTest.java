@@ -1,4 +1,4 @@
-package com.exi.bookmanagement;
+package com.exi.bookmanagement.controller;
 
 import com.exi.bookmanagement.entity.Reader;
 import com.exi.bookmanagement.mapper.ReaderMapper;
@@ -18,7 +18,7 @@ import java.util.List;
 /**
  *  Copyright: Copyright (c) 2021 Asiainfo
  *
- *  @ClassName: com.exi.bookmanagement.ReaderTest
+ *  @ClassName: com.exi.bookmanagement.controller.ReaderTest
  *  @Description: 该类的功能描述
  * <p>
  *  @version: v1.0.0
