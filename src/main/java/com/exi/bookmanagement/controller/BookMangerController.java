@@ -1,7 +1,6 @@
 package com.exi.bookmanagement.controller;
 
 import com.exi.bookmanagement.entity.BookManager;
-import com.exi.bookmanagement.entity.Reader;
 import com.exi.bookmanagement.mapper.BookManagerMapper;
 import com.exi.bookmanagement.response.BookManagerResponse;
 import com.exi.bookmanagement.service.IUserLoginService;
@@ -51,7 +50,7 @@ public class BookMangerController {
     @ApiOperation("分页查询图书管理员信息")
     @GetMapping(value = "/getBookManagersPage/{pageNum}/{pageSize}")
     public BookManagerResponse getBookManagersPage( @PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize){
-        Page<Reader> pageInfo = PageHelper.startPage(pageNum, pageSize);
+        Page<BookManager> pageInfo = PageHelper.startPage(pageNum, pageSize);
         if (pageInfo.getPageNum() == 0 || pageInfo.getPageSize() == 0) {
             log.info("pageNum || pageSize 有值为空");
         }
@@ -59,7 +58,7 @@ public class BookMangerController {
         PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         List<BookManager> bookManagerList = bookManagerMapper.getAllBookManagerBean();
         // 如果在获取到数据之后就对数据进行转dto操作的话，会获取不到total数据，所以又定义了一个PageInfo类然后将数据进行属性复制，来获取数据
-        PageInfo<Reader> pageInfo1 = new PageInfo<>();
+        PageInfo<BookManager> pageInfo1 = new PageInfo<>();
         BeanUtils.copyProperties(new PageInfo<>(bookManagerList), pageInfo1);
         log.info("封装后的 pageInfo:{}",pageInfo1);
         // 定义一个 response 把状态码和 message 加到 response 里面，不然前台会拒绝请求
