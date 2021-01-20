@@ -11,9 +11,9 @@ public class EBook implements Serializable {
   private String eBookPicture;
   private String eBookIsbn;
   private String eBookIntro;
-  private long categoryId;
   private String eBookPress;
   private String eBookFileUrl;
+  private long categoryId;
 
 
   public long getEBookId() {

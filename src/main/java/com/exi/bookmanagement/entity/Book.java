@@ -12,8 +12,8 @@ public class Book implements Serializable {
   private String bookPicture;
   private String bookIsbn;
   private String bookIntro;
-  private long categoryId;
   private String bookPress;
+  private long categoryId;
 
 
   public long getBookId() {
