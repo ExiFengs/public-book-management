@@ -212,7 +212,7 @@ public class ReaderController {
     }
 
     @ApiOperation("前端返回 token 后台接收")
-    @GetMapping(value = "/getReaderInfo")
+    @PostMapping(value = "/getReaderInfo")
     public ReaderResponse getReaderInfo(@RequestBody HttpServletRequest request){
         log.info("这是请求{} ", request.getParameter("token"));
         Integer readerId = JwtUtils.getMemberIdByJwtToken(request);

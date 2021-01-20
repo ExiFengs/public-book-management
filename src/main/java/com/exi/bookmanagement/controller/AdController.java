@@ -177,21 +177,23 @@ public class AdController {
         File uploadDir = new File(path+"/static/img/ad");
         if (!uploadDir.exists()) {
             System.out.println("上传图片路径不存在，正在创建...");
-            uploadDir.mkdir();
+            uploadDir.mkdirs();
+            System.out.println(uploadDir.getPath());
         }
         if ( uploadFile != null) {
             //获得上传文件的文件名
             String oldName = uploadFile.getOriginalFilename();
             System.out.println("[上传的文件名]：" + oldName);
-            //我的文件保存在static目录下的avatar/user
+            //我的文件保存在static目录下的/static/img/ad/
             File avatar = new File(path + "/static/img/ad/" , oldName);
             try {
                 //保存图片
                 uploadFile.transferTo(avatar);
                 //返回成功结果，附带文件的相对路径
+                //http://localhost:8888/bookManagement/img/ad/WechatIMG33.jpg
                 adResponse.setCode(20000);
                 adResponse.setMessage("返回 date 为 上传图片文件的绝对路径");
-                adResponse.setFileName(path+"static/img/ad/"+oldName);
+                adResponse.setFileName("/img/ad/"+oldName);
                 return adResponse;
             }catch (IOException e) {
                 e.printStackTrace();
