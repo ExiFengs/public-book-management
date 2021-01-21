@@ -32,7 +32,7 @@ public interface EBookMapper {
             @Result(property = "eBookIntro", column = "e_book_intro"),
             @Result(property = "eBookPress", column = "e_book_press"),
             @Result(property = "eBookFileUrl", column = "e_book_file_url"),
-            @Result(property = "categoryId", column = "category_id")
+            @Result(property = "eCategoryId", column = "e_category_id")
     })
     List<EBook> getAllEBookBean();
 
@@ -41,14 +41,14 @@ public interface EBookMapper {
     EBook getOneEBookBeanById(Long eBookId);
 
 
-    @Insert("INSERT INTO e_book(e_book_author, e_book_name, e_book_picture, e_book_isbn, e_book_intro, e_book_press, e_book_file_url, category_id) " +
-            "VALUES(#{eBookAuthor}, #{eBookName}, #{eBookPicture}, #{eBookIsbn}, #{eBookIntro}, #{eBookPress}, #{eBookFileUrl}, #{categoryId})")
+    @Insert("INSERT INTO e_book(e_book_author, e_book_name, e_book_picture, e_book_isbn, e_book_intro, e_book_press, e_book_file_url, e_category_id) " +
+            "VALUES(#{eBookAuthor}, #{eBookName}, #{eBookPicture}, #{eBookIsbn}, #{eBookIntro}, #{eBookPress}, #{eBookFileUrl}, #{eCategoryId})")
     @Options(useGeneratedKeys = true, keyProperty = "e_book_id")
     int insertEBookBean(EBook eBook);
 
     @Update("UPDATE e_book SET e_book_author=#{eBookAuthor},e_book_name=#{eBookName}," +
             "e_book_picture=#{eBookPicture}, e_book_isbn=#{eBookIsbn}, e_book_intro=#{eBookIntro}," +
-            "e_book_press=#{eBookPress}, e_book_file_url=#{eBookFileUrl}, category_id=#{categoryId}" +
+            "e_book_press=#{eBookPress}, e_book_file_url=#{eBookFileUrl}, e_category_id=#{eCategoryId}" +
             " WHERE e_book_id =#{eBookId}")
     int updateEBookBean(EBook eBook);
 

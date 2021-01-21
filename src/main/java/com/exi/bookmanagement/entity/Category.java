@@ -8,7 +8,6 @@ public class Category implements Serializable {
   private long categoryId;
   private long bookId;
   private String categoryName;
-  private long eBookId;
 
 
   public long getCategoryId() {
@@ -37,13 +36,5 @@ public class Category implements Serializable {
     this.categoryName = categoryName;
   }
 
-
-  public long getEBookId() {
-    return eBookId;
-  }
-
-  public void setEBookId(long eBookId) {
-    this.eBookId = eBookId;
-  }
 
 }

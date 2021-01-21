@@ -13,7 +13,7 @@ public class EBook implements Serializable {
   private String eBookIntro;
   private String eBookPress;
   private String eBookFileUrl;
-  private long categoryId;
+  private long eCategoryId;
 
 
   public long getEBookId() {
@@ -70,14 +70,13 @@ public class EBook implements Serializable {
   }
 
 
-  public long getCategoryId() {
-    return categoryId;
+  public long geteCategoryId() {
+    return eCategoryId;
   }
 
-  public void setCategoryId(long categoryId) {
-    this.categoryId = categoryId;
+  public void seteCategoryId(long eCategoryId) {
+    this.eCategoryId = eCategoryId;
   }
-
 
   public String getEBookPress() {
     return eBookPress;
