@@ -1,6 +1,12 @@
 package com.exi.bookmanagement.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.exi.bookmanagement.entity.Book;
+import com.exi.bookmanagement.entity.Category;
 import com.exi.bookmanagement.entity.Reader;
+import com.exi.bookmanagement.mapper.BookMapper;
+import com.exi.bookmanagement.mapper.CategoryMapper;
+import com.exi.bookmanagement.mapper.EBookMapper;
 import com.exi.bookmanagement.mapper.ReaderMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -37,8 +43,28 @@ public class ReaderTest {
     @Autowired
     private ReaderMapper readerMapper;
 
+    @Autowired
+    private BookMapper bookMapper;
+
+    @Autowired
+    private EBookMapper eBookMapper;
+
+    @Autowired
+    private CategoryMapper categoryMapper;
+
     Logger logger = LoggerFactory.getLogger(ReaderTest.class);
 
+    @Test
+    public void getBookBeanByCategory() {
+
+        List<Book> bookBeanByCategory = bookMapper.getBookBeanByCategory(1L);
+        Category categoryByIdForBook = categoryMapper.getCategoryByIdForBook(1L);
+
+        List<Book> allBookBean = bookMapper.getAllBookBean();
+        log.info("allBookBean :{}", JSON.toJSONString(allBookBean));
+//        log.info("categoryByIdForBook :{}",JSON.toJSONString(categoryByIdForBook));
+
+    }
     @Test
     public void testQuery() throws Exception {
         List<Reader> readerList = readerMapper.getAllReaderBean();

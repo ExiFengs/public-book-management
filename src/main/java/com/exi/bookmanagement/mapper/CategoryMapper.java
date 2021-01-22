@@ -24,7 +24,6 @@ public interface CategoryMapper {
     @Select("SELECT * FROM category")
     @Results(id = "categoryMap", value = {
             @Result(property = "categoryId",  column = "category_id"),
-            @Result(property = "bookId", column = "book_id"),
             @Result(property = "categoryName", column = "category_name")
     })
     List<Category> getAllCategoryBean();
@@ -34,12 +33,24 @@ public interface CategoryMapper {
     Category getOneCategoryById(Long categoryId);
 
 
-    @Insert("INSERT INTO category(book_id,category_name) " +
-            "VALUES(#{bookId}, #{categoryName})")
+    //一个类别对应多本纸质书和电子书
+    @Select("SELECT * FROM category WHERE category_id = #{categoryId}")
+    @Results({
+            @Result(property = "categoryId",  column = "category_id"),
+            @Result(property="categoryName",column="category_name"),
+            @Result(property="bookList",column="category_id",javaType=List.class,
+                    many=@Many(select="com.exi.bookmanagement.mapper.BookMapper.getBookBeanByCategory")),
+            @Result(property="eBookList",column="category_id",javaType=List.class,
+                    many=@Many(select="com.exi.bookmanagement.mapper.EBookMapper.getEBookBeanByCategory"))
+    })
+    Category getCategoryByIdForBook(Long categoryId);
+
+    @Insert("INSERT INTO category(category_name) " +
+            "VALUES(#{categoryName})")
     @Options(useGeneratedKeys = true, keyProperty = "category_id")
     int insertCategoryBean(Category category);
 
-    @Update("UPDATE category SET book_id=#{bookId},category_name=#{categoryName}" +
+    @Update("UPDATE category SET category_name=#{categoryName}" +
             " WHERE category_id =#{categoryId}")
     int updateCategoryBean(Category category);
 

@@ -14,7 +14,16 @@ public class Book implements Serializable {
   private String bookIntro;
   private String bookPress;
   private long categoryId;
+  private Category category;
 
+
+  public Category getCategory() {
+    return category;
+  }
+
+  public void setCategory(Category category) {
+    this.category = category;
+  }
 
   public long getBookId() {
     return bookId;

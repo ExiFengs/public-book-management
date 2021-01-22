@@ -25,7 +25,6 @@ public interface EBCategoryMapper {
     @Select("SELECT * FROM e_book_category")
     @Results(id = "eBCategoryMap", value = {
             @Result(property = "eCategoryId",  column = "e_category_id"),
-            @Result(property = "eBookId", column = "e_book_id"),
             @Result(property = "eCategoryName", column = "e_category_name")
     })
     List<EBookCategory> getAllEBCategoryBean();
@@ -35,12 +34,13 @@ public interface EBCategoryMapper {
     EBookCategory getOneEBCategoryById(Long eCategoryId);
 
 
-    @Insert("INSERT INTO e_book_category(e_book_id,e_category_name) " +
-            "VALUES(#{eBookId}, #{eCategoryName})")
+
+    @Insert("INSERT INTO e_book_category(e_category_name) " +
+            "VALUES(#{eCategoryName})")
     @Options(useGeneratedKeys = true, keyProperty = "e_category_id")
     int insertEBCategoryBean(EBookCategory eBookCategory);
 
-    @Update("UPDATE e_book_category SET e_book_id=#{eBookId},e_category_name=#{eCategoryName}" +
+    @Update("UPDATE e_book_category SET e_category_name=#{eCategoryName}" +
             " WHERE e_category_id =#{eCategoryId}")
     int updateEBCategoryBean(EBookCategory eBookCategory);
 

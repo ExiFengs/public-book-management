@@ -1,5 +1,6 @@
 package com.exi.bookmanagement.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.exi.bookmanagement.entity.Category;
 import com.exi.bookmanagement.mapper.CategoryMapper;
 import com.exi.bookmanagement.response.CategoryResponse;
@@ -81,6 +82,7 @@ public class CategoryController {
         categoryResponse.setCategoryList(categoryList);
         categoryResponse.setCode(20000);
         categoryResponse.setMessage("返回 date 为 categoryList 全部数据");
+        log.info("categoryResponse:{}", JSON.toJSONString(categoryResponse));
         return categoryResponse;
     }
 

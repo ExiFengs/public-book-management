@@ -6,7 +6,6 @@ import java.io.Serializable;
 public class EBookCategory implements Serializable {
 
   private long eCategoryId;
-  private long eBookId;
   private String eCategoryName;
 
 
@@ -19,13 +18,6 @@ public class EBookCategory implements Serializable {
   }
 
 
-  public long getEBookId() {
-    return eBookId;
-  }
-
-  public void setEBookId(long eBookId) {
-    this.eBookId = eBookId;
-  }
 
 
   public String getECategoryName() {
