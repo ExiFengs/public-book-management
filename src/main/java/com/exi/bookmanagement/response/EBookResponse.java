@@ -30,6 +30,8 @@ public class EBookResponse implements Serializable {
     private String token;
     private String fileName;
     private String eBookFileName;
+    private String eBookRealFileName;
+    private List<String> fileNames;
 
 
     @Override
@@ -45,6 +47,22 @@ public class EBookResponse implements Serializable {
                 ", fileName='" + fileName + '\'' +
                 ", eBookFileName='" + eBookFileName + '\'' +
                 '}';
+    }
+
+    public List<String> getFileNames() {
+        return fileNames;
+    }
+
+    public void setFileNames(List<String> fileNames) {
+        this.fileNames = fileNames;
+    }
+
+    public String geteBookRealFileName() {
+        return eBookRealFileName;
+    }
+
+    public void seteBookRealFileName(String eBookRealFileName) {
+        this.eBookRealFileName = eBookRealFileName;
     }
 
     public Integer getCode() {

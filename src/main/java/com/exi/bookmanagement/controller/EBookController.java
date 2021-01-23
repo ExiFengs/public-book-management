@@ -183,7 +183,7 @@ public class EBookController {
         if ( uploadFile != null) {
             //获得上传文件的文件名
             String oldName = uploadFile.getOriginalFilename();
-            System.out.println("[上传的文件名]：" + oldName);
+            System.out.println("[上传的文件名：" + oldName);
             File avatar = new File(path + "/static/img/ebook/" , oldName);
             try {
                 //保存图片
@@ -193,6 +193,52 @@ public class EBookController {
                 eBookResponse.setCode(20000);
                 eBookResponse.setMessage("返回 date 为 上传图片文件的相对路径");
                 eBookResponse.setFileName("/img/ebook/"+oldName);
+                return eBookResponse;
+            }catch (IOException e) {
+                e.printStackTrace();
+                eBookResponse.setCode(888888);
+                eBookResponse.setMessage("上传失败");
+                return eBookResponse;
+            }
+        }else {
+            System.out.println("上传的文件为空");
+            eBookResponse.setCode(888888);
+            eBookResponse.setMessage("文件传输错误");
+            return eBookResponse;
+        }
+
+    }
+
+    /**
+     * PDF 文件上传
+     */
+    @ApiOperation("PDF文件上传")
+    @PostMapping("/uploadEBookFile")
+    public EBookResponse uploadEBookFile(@RequestParam("uploadEBookFile") MultipartFile uploadEBookFile ) throws IOException {
+        EBookResponse eBookResponse = new EBookResponse();
+        //获得项目的类路径
+        String path = ResourceUtils.getURL("classpath:").getPath();
+        //空文件夹在编译时不会打包进入target中
+        File uploadDir = new File(path+"/static/file/ebook");
+        if (!uploadDir.exists()) {
+            System.out.println("上传图片路径不存在，正在创建...");
+            uploadDir.mkdirs();
+            System.out.println(uploadDir.getPath());
+        }
+        if ( uploadEBookFile != null) {
+            //获得上传文件的文件名
+            String oldName = uploadEBookFile.getOriginalFilename();
+            System.out.println("[上传的文件名：" + oldName);
+            File avatar = new File(path + "/static/file/ebook/" , oldName);
+            try {
+                //保存图片
+                uploadEBookFile.transferTo(avatar);
+                //返回成功结果，附带文件的相对路径
+                //http://localhost:8888/bookManagement/img/ad/WechatIMG33.jpg
+                eBookResponse.setCode(20000);
+                eBookResponse.setMessage("返回 date 为 上传图片文件的相对路径");
+                eBookResponse.setFileName("/file/ebook/"+oldName);
+                eBookResponse.seteBookRealFileName(oldName);
                 return eBookResponse;
             }catch (IOException e) {
                 e.printStackTrace();
