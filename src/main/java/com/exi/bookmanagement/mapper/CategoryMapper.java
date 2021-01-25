@@ -35,15 +35,16 @@ public interface CategoryMapper {
 
     //一个类别对应多本纸质书和电子书
     @Select("SELECT * FROM category WHERE category_id = #{categoryId}")
-    @Results({
+    @Results(value = {
             @Result(property = "categoryId",  column = "category_id"),
-            @Result(property="categoryName",column="category_name"),
-            @Result(property="bookList",column="category_id",javaType=List.class,
-                    many=@Many(select="com.exi.bookmanagement.mapper.BookMapper.getBookBeanByCategory")),
-            @Result(property="eBookList",column="category_id",javaType=List.class,
-                    many=@Many(select="com.exi.bookmanagement.mapper.EBookMapper.getEBookBeanByCategory"))
+            @Result(property = "categoryName", column = "category_name"),
+            //这里的 column 是映射回分类表的主键
+            @Result(column="category_id",property="bookList",javaType=List.class,
+                    one=@One(select="com.exi.bookmanagement.mapper.BookMapper.getOneBookBeanByCategoryId")),
+            @Result(column="category_id",property="eBookList",javaType=List.class,
+                    one=@One(select="com.exi.bookmanagement.mapper.EBookMapper.getOneEBookBeanByCategotyId"))
     })
-    Category getCategoryByIdForBook(Long categoryId);
+    Category getOneCategoryByBookCategoryId(Long categoryId);
 
     @Insert("INSERT INTO category(category_name) " +
             "VALUES(#{categoryName})")

@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -147,18 +148,29 @@ public class CategoryController {
     public CategoryResponse delete(@PathVariable("id") Long id) {
         CategoryResponse categoryResponse = new CategoryResponse();
         try {
-            int result = categoryMapper.deleteCategoryBean(id);
-            categoryResponse.setResult(result);
-            categoryResponse.setCode(20000);
-            categoryResponse.setMessage("返回 date 为 deleteCategoryBeanResponse");
-            if (result != 0){
-                return categoryResponse;
-            }else {
-                return null;
+            Category oneCategoryById = categoryMapper.getOneCategoryByBookCategoryId(id);
+            //如果此时电子书和纸质书都没使用到该类别，则该类别可以进行删除
+            if (CollectionUtils.isEmpty(oneCategoryById.getBookList()) && CollectionUtils.isEmpty(oneCategoryById.geteBookList())){
+                int result = categoryMapper.deleteCategoryBean(id);
+                categoryResponse.setResult(result);
+                categoryResponse.setCode(20000);
+                categoryResponse.setMessage("返回 date 为 deleteCategoryBeanResponse");
+                if (result != 0){
+                    return categoryResponse;
+                }else {
+                    categoryResponse.setCode(88888);
+                    categoryResponse.setMessage("删除纸质图书分类信息出问题啦");
+                    return null;
+                }
             }
+            categoryResponse.setCode(88888);
+            categoryResponse.setMessage("该图书分类还有图书关联，不能删除！");
+            return categoryResponse;
         }catch (Exception e){
             log.info("删除纸质图书分类信息出问题啦");
         }
+        categoryResponse.setCode(88888);
+        categoryResponse.setMessage("删除纸质图书分类信息出问题啦");
         return categoryResponse;
     }
 

@@ -2,7 +2,6 @@ package com.exi.bookmanagement.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.exi.bookmanagement.entity.Category;
-import com.exi.bookmanagement.entity.EBook;
 import com.exi.bookmanagement.entity.Reader;
 import com.exi.bookmanagement.mapper.BookMapper;
 import com.exi.bookmanagement.mapper.CategoryMapper;
@@ -57,11 +56,11 @@ public class ReaderTest {
     @Test
     public void getBookBeanByCategory() {
 
-        Category categoryByIdForBook = categoryMapper.getCategoryByIdForBook(1L);
+        Category categoryByIdForBook = categoryMapper.getOneCategoryByBookCategoryId(4L);
 
-        List<EBook> allBookBean = eBookMapper.getAllEBookBean();
-        log.info("allBookBean :{}", JSON.toJSONString(allBookBean));
-//        log.info("categoryByIdForBook :{}",JSON.toJSONString(categoryByIdForBook));
+        /*List<EBook> allBookBean = eBookMapper.getAllEBookBean();
+        log.info("allBookBean :{}", JSON.toJSONString(allBookBean));*/
+        log.info("categoryByIdForBook :{}", JSON.toJSONString(categoryByIdForBook));
 
     }
     @Test

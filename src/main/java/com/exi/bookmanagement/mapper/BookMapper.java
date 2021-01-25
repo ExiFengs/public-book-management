@@ -1,7 +1,6 @@
 package com.exi.bookmanagement.mapper;
 
 import com.exi.bookmanagement.entity.Book;
-import com.exi.bookmanagement.entity.Category;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -43,23 +42,10 @@ public interface BookMapper {
     @ResultMap(value = "bookMap")
     Book getOneBookBeanById(Long bookId);
 
+    @Select("SELECT * FROM book WHERE category_id = #{category_id}")
+    @ResultMap(value = "bookMap")
+    Book getOneBookBeanByCategoryId(Long category_id);
 
-    //与书类别 形成多对一关系
-    @Select("SELECT * FROM book")
-    @Results(value = {
-            @Result(property = "bookId",  column = "book_id"),
-            @Result(property = "bookAuthor", column = "book_author"),
-            @Result(property = "bookName", column = "book_name"),
-            @Result(property = "bookRepertory", column = "book_repertory"),
-            @Result(property = "bookPicture", column = "book_picture"),
-            @Result(property = "bookIsbn", column = "book_isbn"),
-            @Result(property = "bookIntro", column = "book_intro"),
-            @Result(property = "bookPress", column = "book_press"),
-            @Result(property = "categoryId", column = "category_id"),
-            @Result(property="category",column="category_id",javaType= Category.class,
-                    one=@One(select="com.exi.bookmanagement.mapper.CategoryMapper.getCategoryByIdForBook"))
-    })
-    List<Book> getBookBeanByCategory(Long categoryId);
 
     @Insert("INSERT INTO book(book_author,book_name, book_repertory, book_picture, book_isbn, book_intro, book_press, category_id) " +
             "VALUES(#{bookAuthor}, #{bookName}, #{bookRepertory}, #{bookPicture}, #{bookIsbn}, #{bookIntro}, #{bookPress}, #{categoryId})")

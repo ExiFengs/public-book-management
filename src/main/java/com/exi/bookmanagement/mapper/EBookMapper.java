@@ -1,6 +1,5 @@
 package com.exi.bookmanagement.mapper;
 
-import com.exi.bookmanagement.entity.Category;
 import com.exi.bookmanagement.entity.EBook;
 import org.apache.ibatis.annotations.*;
 
@@ -42,22 +41,9 @@ public interface EBookMapper {
     @ResultMap(value = "EbookMap")
     EBook getOneEBookBeanById(Long eBookId);
 
-    //与书类别 形成多对一关系
-    @Select("SELECT * FROM e_book")
-    @Results(value = {
-            @Result(property = "eBookId",  column = "e_book_id"),
-            @Result(property = "eBookAuthor", column = "e_book_author"),
-            @Result(property = "eBookName", column = "e_book_name"),
-            @Result(property = "eBookPicture", column = "e_book_picture"),
-            @Result(property = "eBookIsbn", column = "e_book_isbn"),
-            @Result(property = "eBookIntro", column = "e_book_intro"),
-            @Result(property = "eBookPress", column = "e_book_press"),
-            @Result(property = "eBookFileUrl", column = "e_book_file_url"),
-            @Result(property = "categoryId", column = "category_id"),
-            @Result(property="category",column="category_id",javaType= Category.class,
-                    one=@One(select="com.exi.bookmanagement.mapper.CategoryMapper.getCategoryByIdForBook"))
-    })
-    List<EBook> getEBookBeanByCategory(Long categoryId);
+    @Select("SELECT * FROM e_book WHERE category_id = #{category_id}")
+    @ResultMap(value = "EbookMap")
+    EBook getOneEBookBeanByCategotyId(Long category_id);
 
     @Insert("INSERT INTO e_book(e_book_author, e_book_name, e_book_picture, e_book_isbn, e_book_intro, e_book_press, e_book_file_url, category_id) " +
             "VALUES(#{eBookAuthor}, #{eBookName}, #{eBookPicture}, #{eBookIsbn}, #{eBookIntro}, #{eBookPress}, #{eBookFileUrl}, #{categoryId})")

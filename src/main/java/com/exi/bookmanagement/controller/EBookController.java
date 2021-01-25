@@ -1,5 +1,6 @@
 package com.exi.bookmanagement.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.exi.bookmanagement.entity.EBook;
 import com.exi.bookmanagement.mapper.EBookMapper;
 import com.exi.bookmanagement.response.EBookResponse;
@@ -74,6 +75,7 @@ public class EBookController {
         eBookResponse.setCode(20000);
         eBookResponse.setMessage("返回 date 为 eBookList 的按名字模糊查询");
         eBookResponse.seteBookList(eBookList);
+        log.info("eBookResponse:{}", JSON.toJSONString(eBookResponse));
         return eBookResponse;
     }
 
