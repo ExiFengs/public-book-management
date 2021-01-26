@@ -22,33 +22,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class CorsConfig implements WebMvcConfigurer{
-    /**
-     * 跨域配置
-     */
-    /*@Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        // 允许跨域访问的 URL
-        List<String> allowedOriginsUrl = new ArrayList<>();
-        allowedOriginsUrl.add("http://localhost:9528");
-        allowedOriginsUrl.add("http://172.31.11.47:9528");
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        // 设置允许跨域访问的 URL
-        config.setAllowedOrigins(allowedOriginsUrl);
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
-    }*/
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         WebMvcConfigurer.super.addCorsMappings(registry);
-        registry.addMapping("/**") // 访问所有东西都跨域
+        registry.addMapping("/**")
                 .allowedOrigins("http://localhost:9528","null")
-                .allowedMethods("POST","GET","PUT","OPTIONS","DELETE") //
-                .maxAge(3600) // 最大响应时间
-                .allowCredentials(true); // 是否携带信息
+                .allowedMethods("POST","GET","PUT","OPTIONS","DELETE")
+                // 最大响应时间
+                .maxAge(3600)
+                // 是否携带信息
+                .allowCredentials(true);
     }
 
     @Override

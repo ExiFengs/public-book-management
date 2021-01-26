@@ -1,7 +1,9 @@
 package com.exi.bookmanagement.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.exi.bookmanagement.entity.Book;
 import com.exi.bookmanagement.entity.Category;
+import com.exi.bookmanagement.entity.EBook;
 import com.exi.bookmanagement.mapper.CategoryMapper;
 import com.exi.bookmanagement.response.CategoryResponse;
 import com.github.pagehelper.Page;
@@ -60,6 +62,21 @@ public class CategoryController {
         categoryResponse.setCode(20000);
         categoryResponse.setMessage("返回 date 为 categoryList 的分页List");
         categoryResponse.setPageInfo(pageInfo1);
+        return categoryResponse;
+    }
+
+    @ApiOperation("按分类id查询对应纸质书和电子书的信息")
+    @GetMapping(value = "/getOneCategoryByBookCategoryId/{categoryId}")
+    public CategoryResponse getOneCategoryByBookCategoryId(@PathVariable("categoryId") Long categoryId){
+        CategoryResponse categoryResponse = new CategoryResponse();
+        Category oneCategoryByBookCategoryId = categoryMapper.getOneCategoryByBookCategoryId(categoryId);
+        List<Book> bookList = oneCategoryByBookCategoryId.getBookList();
+        List<EBook> eBooks = oneCategoryByBookCategoryId.geteBookList();
+        categoryResponse.setCategoryId(categoryId);
+        categoryResponse.setBookList(bookList);
+        categoryResponse.seteBookList(eBooks);
+        categoryResponse.setCode(20000);
+        categoryResponse.setMessage("返回的 data 为 bookList 和 ebookList 和 CategoryId");
         return categoryResponse;
     }
 

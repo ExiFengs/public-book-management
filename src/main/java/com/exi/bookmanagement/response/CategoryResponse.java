@@ -1,6 +1,8 @@
 package com.exi.bookmanagement.response;
 
+import com.exi.bookmanagement.entity.Book;
 import com.exi.bookmanagement.entity.Category;
+import com.exi.bookmanagement.entity.EBook;
 import com.github.pagehelper.PageInfo;
 
 import java.io.Serializable;
@@ -28,6 +30,9 @@ public class CategoryResponse implements Serializable {
     private List<Category> categoryList;
     private PageInfo pageInfo;
     private String token;
+    private List<Book> bookList;
+    private List<EBook> eBookList;
+    private Long categoryId;
 
     @Override
     public String toString() {
@@ -40,6 +45,30 @@ public class CategoryResponse implements Serializable {
                 ", pageInfo=" + pageInfo +
                 ", token='" + token + '\'' +
                 '}';
+    }
+
+    public List<Book> getBookList() {
+        return bookList;
+    }
+
+    public void setBookList(List<Book> bookList) {
+        this.bookList = bookList;
+    }
+
+    public List<EBook> geteBookList() {
+        return eBookList;
+    }
+
+    public void seteBookList(List<EBook> eBookList) {
+        this.eBookList = eBookList;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Integer getCode() {

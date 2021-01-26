@@ -56,7 +56,7 @@ public class ReaderTest {
     @Test
     public void getBookBeanByCategory() {
 
-        Category categoryByIdForBook = categoryMapper.getOneCategoryByBookCategoryId(4L);
+        Category categoryByIdForBook = categoryMapper.getOneCategoryByBookCategoryId(2L);
 
         /*List<EBook> allBookBean = eBookMapper.getAllEBookBean();
         log.info("allBookBean :{}", JSON.toJSONString(allBookBean));*/
