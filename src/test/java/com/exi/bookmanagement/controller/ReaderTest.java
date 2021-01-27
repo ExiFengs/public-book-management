@@ -2,11 +2,9 @@ package com.exi.bookmanagement.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.exi.bookmanagement.entity.Category;
+import com.exi.bookmanagement.entity.ReadBook;
 import com.exi.bookmanagement.entity.Reader;
-import com.exi.bookmanagement.mapper.BookMapper;
-import com.exi.bookmanagement.mapper.CategoryMapper;
-import com.exi.bookmanagement.mapper.EBookMapper;
-import com.exi.bookmanagement.mapper.ReaderMapper;
+import com.exi.bookmanagement.mapper.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,7 +49,31 @@ public class ReaderTest {
     @Autowired
     private CategoryMapper categoryMapper;
 
+    @Autowired
+    private ReadBookMapper readBookMapper;
+
+    @Autowired
+    private ReadBookHisMapper readBookHisMapper;
+
     Logger logger = LoggerFactory.getLogger(ReaderTest.class);
+
+
+    @Test
+    public void testReadBook(){
+        /*ReadBook readBook = new ReadBook();
+        readBook.setEBookId(10L);
+        readBook.setReaderId(139L);
+        readBookMapper.insertReadBookBean(readBook);
+        long readId = readBook.getReadId();
+        ReadBookHis readBookHis = new ReadBookHis();
+        readBookHis.setReadId(readId);
+        readBookHis.setReadNum(1L);
+        int i1 = readBookHisMapper.insertReadBookHisBean(readBookHis);
+        log.info("readBook:{}",readBook);
+        log.info("readBookHis:{}",readBookHis);*/
+        List<ReadBook> oneReadBookBean = readBookMapper.getAllReadBookByEbookIdAndReadIdAndReaderId();
+        log.info("readBookBeanByReaderIdAndEbookId:{}",JSON.toJSONString(oneReadBookBean));
+    }
 
     @Test
     public void getBookBeanByCategory() {
