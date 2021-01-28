@@ -20,7 +20,7 @@ import java.util.List;
  * ----------------------------------------------------------
  *  1/8/21    Fengsx     v1.0.0      修改原因
  */
-
+@CacheNamespace(blocking = true)
 public interface ReaderMapper {
 
     @Select("SELECT * FROM reader")

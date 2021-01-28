@@ -19,6 +19,7 @@ import java.util.List;
  * ----------------------------------------------------------
  * 2021/1/19    Fengsx     v1.0.0      修改原因
  */
+@CacheNamespace(blocking = true)
 public interface AdMapper {
 
     @Select("SELECT * FROM advertisement")

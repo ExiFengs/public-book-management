@@ -6,9 +6,13 @@ import com.exi.bookmanagement.entity.ReadBookHis;
 import com.exi.bookmanagement.mapper.ReadBookHisMapper;
 import com.exi.bookmanagement.mapper.ReadBookMapper;
 import com.exi.bookmanagement.response.ReadBookResponse;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -42,6 +46,62 @@ public class ReadBookController {
     @Autowired
     private ReadBookHisMapper readBookHisMapper;
 
+
+    @ApiOperation("分页查询指定读者电子图书阅读记录")
+    @GetMapping(value = "/getReadBooksPage/{pageNum}/{pageSize}/{readerId}")
+    public ReadBookResponse getReadBooksPage(@PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize, @PathVariable("readerId") Long readerId){
+        ReadBookResponse readBookResponse = new ReadBookResponse();
+        Page<ReadBook> pageInfo = PageHelper.startPage(pageNum, pageSize);
+        if (pageInfo.getPageNum() == 0 || pageInfo.getPageSize() == 0) {
+            log.info("pageNum || pageSize 有值为空");
+        }
+        //并查询
+        PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+        List<ReadBook> readBookList = readBookMapper.getReadBookListByEbookIdAndReadId(readerId);
+        if (CollectionUtils.isEmpty(readBookList)){
+            readBookResponse.setCode(88888);
+            readBookResponse.setMessage("你没有阅读电子书的记录哦~");
+            return readBookResponse;
+        }
+        // 如果在获取到数据之后就对数据进行转dto操作的话，会获取不到total数据，所以又定义了一个PageInfo类然后将数据进行属性复制，来获取数据
+        PageInfo<ReadBook> pageInfo1 = new PageInfo<>();
+        BeanUtils.copyProperties(new PageInfo<>(readBookList), pageInfo1);
+        log.info("封装后的 pageInfo:{}",pageInfo1);
+        // 定义一个 response 把状态码和 message 加到 response 里面，不然前台会拒绝请求
+        readBookResponse.setCode(20000);
+        readBookResponse.setMessage("返回 date 为 返回的是读者阅读电子书的记录");
+        readBookResponse.setPageInfo(pageInfo1);
+        return readBookResponse;
+    }
+
+    //按书名分组，按读者分组
+    @ApiOperation("分页查询所有读者电子图书阅读记录")
+    @GetMapping(value = "/getAllReadBooksPage/{pageNum}/{pageSize}")
+    public ReadBookResponse getAllReadBooksPage(@PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize){
+        ReadBookResponse readBookResponse = new ReadBookResponse();
+        Page<ReadBook> pageInfo = PageHelper.startPage(pageNum, pageSize);
+        if (pageInfo.getPageNum() == 0 || pageInfo.getPageSize() == 0) {
+            log.info("pageNum || pageSize 有值为空");
+        }
+        //并查询
+        PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+        List<ReadBook> readBookList = readBookMapper.getAllReadBookByEbookIdAndReadIdAndReaderId();
+        if (CollectionUtils.isEmpty(readBookList)){
+            readBookResponse.setCode(88888);
+            readBookResponse.setMessage("没有阅读电子书的记录哦~");
+            return readBookResponse;
+        }
+        // 如果在获取到数据之后就对数据进行转dto操作的话，会获取不到total数据，所以又定义了一个PageInfo类然后将数据进行属性复制，来获取数据
+        PageInfo<ReadBook> pageInfo1 = new PageInfo<>();
+        BeanUtils.copyProperties(new PageInfo<>(readBookList), pageInfo1);
+        log.info("封装后的 pageInfo:{}",pageInfo1);
+        // 定义一个 response 把状态码和 message 加到 response 里面，不然前台会拒绝请求
+        readBookResponse.setCode(20000);
+        readBookResponse.setMessage("返回 date 为 返回的是全部读者阅读电子书的记录");
+        readBookResponse.setPageInfo(pageInfo1);
+        return readBookResponse;
+    }
+
     //读者查看自己的阅读记录
     @ApiOperation("查询某个读者的阅读电子书记录")
     @GetMapping(value = "/getReaderReadEbookHis/{readerId}")
@@ -49,7 +109,7 @@ public class ReadBookController {
         ReadBookResponse readBookResponse = new ReadBookResponse();
         List<ReadBook> readBookMapperReadBookListByEbookIdAndReadId = readBookMapper.getReadBookListByEbookIdAndReadId(readerId);
         if (CollectionUtils.isEmpty(readBookMapperReadBookListByEbookIdAndReadId)){
-            readBookResponse.setCode(20000);
+            readBookResponse.setCode(80000);
             readBookResponse.setMessage("你没有阅读电子书的记录哦~");
             return readBookResponse;
         }

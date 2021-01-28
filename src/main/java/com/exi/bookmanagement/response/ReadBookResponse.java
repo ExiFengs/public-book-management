@@ -2,6 +2,7 @@ package com.exi.bookmanagement.response;
 
 import com.exi.bookmanagement.entity.ReadBook;
 import com.exi.bookmanagement.entity.ReadBookHis;
+import com.github.pagehelper.PageInfo;
 
 import java.io.Serializable;
 import java.util.List;
@@ -36,7 +37,61 @@ public class ReadBookResponse implements Serializable {
     private ReadBook readBook;
     private ReadBookHis readBookHis;
     private List<ReadBook> readBookList;
+    private PageInfo pageInfo;
+    private String token;
+    private String fileName;
+    private String eBookFileName;
+    private String eBookRealFileName;
+    private List<String> fileNames;
 
+
+    public PageInfo getPageInfo() {
+        return pageInfo;
+    }
+
+    public void setPageInfo(PageInfo pageInfo) {
+        this.pageInfo = pageInfo;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String geteBookFileName() {
+        return eBookFileName;
+    }
+
+    public void seteBookFileName(String eBookFileName) {
+        this.eBookFileName = eBookFileName;
+    }
+
+    public String geteBookRealFileName() {
+        return eBookRealFileName;
+    }
+
+    public void seteBookRealFileName(String eBookRealFileName) {
+        this.eBookRealFileName = eBookRealFileName;
+    }
+
+    public List<String> getFileNames() {
+        return fileNames;
+    }
+
+    public void setFileNames(List<String> fileNames) {
+        this.fileNames = fileNames;
+    }
 
     public List<ReadBook> getReadBookList() {
         return readBookList;
