@@ -1,8 +1,8 @@
 package com.exi.bookmanagement.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.exi.bookmanagement.entity.BorrowBook;
 import com.exi.bookmanagement.entity.Category;
-import com.exi.bookmanagement.entity.ReadBook;
 import com.exi.bookmanagement.entity.Reader;
 import com.exi.bookmanagement.mapper.*;
 import lombok.extern.slf4j.Slf4j;
@@ -53,10 +53,21 @@ public class ReaderTest {
     private ReadBookMapper readBookMapper;
 
     @Autowired
+    private BorrowBookMapper borrowBookMapper;
+
+    @Autowired
+    private BorrowBookHisMapper borrowBookHisMapper;
+
+    @Autowired
     private ReadBookHisMapper readBookHisMapper;
 
     Logger logger = LoggerFactory.getLogger(ReaderTest.class);
 
+
+    @Test
+    public void testBorrowBook(){
+
+    }
 
     @Test
     public void testReadBook(){
@@ -71,8 +82,8 @@ public class ReaderTest {
         int i1 = readBookHisMapper.insertReadBookHisBean(readBookHis);
         log.info("readBook:{}",readBook);
         log.info("readBookHis:{}",readBookHis);*/
-        List<ReadBook> oneReadBookBean = readBookMapper.getAllReadBookByEbookIdAndReadIdAndReaderId();
-        log.info("readBookBeanByReaderIdAndEbookId:{}",JSON.toJSONString(oneReadBookBean));
+        List<BorrowBook> borrowBookListByBookIdAndBorBookId = borrowBookMapper.getBorrowBookListByBookIdAndBorBookId(133L);
+        log.info("readBookBeanByReaderIdAndEbookId:{}",JSON.toJSONString(borrowBookListByBookIdAndBorBookId));
     }
 
     @Test

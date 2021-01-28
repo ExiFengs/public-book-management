@@ -19,7 +19,6 @@ import java.util.List;
  * ----------------------------------------------------------
  * 2021/1/27    Fengsx     v1.0.0      修改原因
  */
-@CacheNamespace(blocking = true)
 public interface ReadBookMapper {
 
     @Select("SELECT * FROM read_book")
@@ -35,6 +34,9 @@ public interface ReadBookMapper {
     @Options(useGeneratedKeys = true, keyProperty = "readId", keyColumn = "read_id")
     void insertReadBookBean(ReadBook readBook);
 
+    /**
+     * 根据读者查询对应的电子书阅读记录
+     **/
     @Select("SELECT * FROM read_book WHERE reader_id = #{readerId}")
     @Results(value = {
             @Result(property = "readId",  column = "read_id"),
@@ -45,23 +47,23 @@ public interface ReadBookMapper {
             @Result(column="read_id",property="readBookHisList",javaType=List.class,
                     one=@One(select="com.exi.bookmanagement.mapper.ReadBookHisMapper.getOneReadBookHisBean")),
     })
-    //根据读者查询对应的电子书阅读记录
     List<ReadBook> getReadBookListByEbookIdAndReadId(Long readerId);
 
-
-    @Select("SELECT * FROM read_book")
+    /**
+     * 后台查看具体的阅读数据
+     **/
+    @Select("SELECT * FROM read_book ORDER BY read_book.reader_id")
     @Results(value = {
             @Result(property = "readId",  column = "read_id"),
             @Result(property = "readerId",  column = "reader_id"),
             @Result(property = "eBookId", column = "e_book_id"),
-            @Result(column="e_book_id",property="eBookList",javaType=List.class,
+            @Result(column="e_book_id",property="eBookList",javaType= List.class,
                     one=@One(select="com.exi.bookmanagement.mapper.EBookMapper.getOneEBookBeanById")),
             @Result(column="read_id",property="readBookHisList",javaType=List.class,
                     one=@One(select="com.exi.bookmanagement.mapper.ReadBookHisMapper.getOneReadBookHisBean")),
             @Result(column="reader_id",property="readerList",javaType=List.class,
                     one=@One(select="com.exi.bookmanagement.mapper.ReaderMapper.getOneReaderBean")),
     })
-    //后台查看具体的阅读数据
     List<ReadBook> getAllReadBookByEbookIdAndReadIdAndReaderId();
 
     @Select("SELECT * FROM read_book WHERE reader_id = #{readerId} AND e_book_id = #{eBookId}")
@@ -71,7 +73,5 @@ public interface ReadBookMapper {
     @Select("SELECT * FROM read_book WHERE reader_id = #{readerId}")
     @ResultMap(value = "readBookMap")
     List<ReadBook> getReadBookBeansByReaderId(Long readerId);
-
-
 
 }

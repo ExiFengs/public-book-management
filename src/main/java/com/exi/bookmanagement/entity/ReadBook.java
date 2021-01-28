@@ -12,7 +12,24 @@ public class ReadBook implements Serializable {
   private List<EBook> eBookList;
   private List<ReadBookHis> readBookHisList;
   private List<Reader> readerList;
+  private EBook eBook;
+  private ReadBookHis readBookHis;
 
+  public EBook geteBook() {
+    return eBook;
+  }
+
+  public void seteBook(EBook eBook) {
+    this.eBook = eBook;
+  }
+
+  public ReadBookHis getReadBookHis() {
+    return readBookHis;
+  }
+
+  public void setReadBookHis(ReadBookHis readBookHis) {
+    this.readBookHis = readBookHis;
+  }
 
   public List<Reader> getReaderList() {
     return readerList;

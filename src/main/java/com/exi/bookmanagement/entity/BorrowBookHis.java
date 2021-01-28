@@ -8,9 +8,9 @@ public class BorrowBookHis implements Serializable {
   private long borBookId;
   private long borBookNum;
   private long booleanLate;
-  private java.sql.Timestamp expectGetBackTime;
-  private java.sql.Timestamp giveBookTime;
-  private java.sql.Timestamp getBackBookTime;
+  private String expectGetBackTime;
+  private String giveBookTime;
+  private String getBackBookTime;
   private long state;
 
 
@@ -40,33 +40,29 @@ public class BorrowBookHis implements Serializable {
     this.booleanLate = booleanLate;
   }
 
-
-  public java.sql.Timestamp getExpectGetBackTime() {
+  public String getExpectGetBackTime() {
     return expectGetBackTime;
   }
 
-  public void setExpectGetBackTime(java.sql.Timestamp expectGetBackTime) {
+  public void setExpectGetBackTime(String expectGetBackTime) {
     this.expectGetBackTime = expectGetBackTime;
   }
 
-
-  public java.sql.Timestamp getGiveBookTime() {
+  public String getGiveBookTime() {
     return giveBookTime;
   }
 
-  public void setGiveBookTime(java.sql.Timestamp giveBookTime) {
+  public void setGiveBookTime(String giveBookTime) {
     this.giveBookTime = giveBookTime;
   }
 
-
-  public java.sql.Timestamp getGetBackBookTime() {
+  public String getGetBackBookTime() {
     return getBackBookTime;
   }
 
-  public void setGetBackBookTime(java.sql.Timestamp getBackBookTime) {
+  public void setGetBackBookTime(String getBackBookTime) {
     this.getBackBookTime = getBackBookTime;
   }
-
 
   public long getState() {
     return state;

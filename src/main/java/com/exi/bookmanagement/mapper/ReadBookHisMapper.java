@@ -19,7 +19,6 @@ import java.util.List;
  * ----------------------------------------------------------
  * 2021/1/27    Fengsx     v1.0.0      修改原因
  */
-@CacheNamespace(blocking = true)
 public interface ReadBookHisMapper {
     @Select("SELECT * FROM read_book_his")
     @Results(id = "readBookHisMap", value = {
