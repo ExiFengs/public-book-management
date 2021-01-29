@@ -71,4 +71,13 @@ public interface BorrowBookMapper {
     @Select("SELECT * FROM borrow_book WHERE reader_id = #{readerId} AND book_id = #{bookId}")
     @ResultMap(value = "borrowBookMap")
     BorrowBook getBorrowBookBeanByReaderIdAndBookId(Long readerId, Long bookId);
+
+    /**
+     * 根据主键查找 bookId
+     **/
+    @Select("SELECT book_id FROM borrow_book WHERE bor_book_id = #{borBookId}")
+    @Results(value = {
+            @Result(property = "bookId", column = "book_id"),})
+    Long getBookByBorBookId(Long borBookId);
+
 }

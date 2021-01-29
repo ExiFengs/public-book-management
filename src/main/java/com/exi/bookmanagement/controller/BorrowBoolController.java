@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -52,6 +53,54 @@ public class BorrowBoolController {
     @Autowired
     private BookMapper bookMapper;
 
+
+    @ApiOperation("读者还书")
+    @GetMapping(value = "/getBackBook/{borBookId}")
+    public BorrowBookResponse getBackBook(@PathVariable("borBookId") Long borBookId) throws ParseException {
+        BorrowBookResponse borrowBookResponse = new BorrowBookResponse();
+        BorrowBookHis oneBorrowBookHisBean = borrowBookHisMapper.getOneBorrowBookHisBean(borBookId);
+        Date time = new Date(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String expectGetBackTime = oneBorrowBookHisBean.getExpectGetBackTime();
+        Date expectGetBackTime1 = sdf.parse(expectGetBackTime);
+        String giveBackBookTime = sdf.format(time);
+        Long bookByBorBookId = borrowBookMapper.getBookByBorBookId(borBookId);
+        Book oneBookBeanById = bookMapper.getOneBookBeanById(bookByBorBookId);
+        if (expectGetBackTime1.after(time)){
+            oneBorrowBookHisBean.setGetBackBookTime(giveBackBookTime);
+            oneBorrowBookHisBean.setState(1);
+            oneBookBeanById.setBookRepertory(oneBookBeanById.getBookRepertory() + oneBorrowBookHisBean.getBorBookNum());
+            //图书库存加回来
+            try {
+                bookMapper.updateBookBean(oneBookBeanById);
+                borrowBookHisMapper.updateBorrowBookHisBean(oneBorrowBookHisBean);
+                borrowBookResponse.setCode(20000);
+                borrowBookResponse.setMessage("还书成功~");
+                return borrowBookResponse;
+            }catch (Exception e){
+                e.printStackTrace();
+                borrowBookResponse.setCode(88888);
+                borrowBookResponse.setMessage("还书失败");
+                return borrowBookResponse;
+            }
+        }
+        try {
+            oneBorrowBookHisBean.setGetBackBookTime(giveBackBookTime);
+            oneBorrowBookHisBean.setState(2);
+            oneBorrowBookHisBean.setBooleanLate(1);
+            oneBookBeanById.setBookRepertory(oneBookBeanById.getBookRepertory() + oneBorrowBookHisBean.getBorBookNum());
+            bookMapper.updateBookBean(oneBookBeanById);
+            borrowBookHisMapper.updateBorrowBookHisBean(oneBorrowBookHisBean);
+            borrowBookResponse.setCode(20000);
+            borrowBookResponse.setMessage("还书成功,你已预期");
+            return borrowBookResponse;
+        }catch (Exception e){
+            e.printStackTrace();
+            borrowBookResponse.setCode(88888);
+            borrowBookResponse.setMessage("还书失败");
+            return borrowBookResponse;
+        }
+    }
 
     @ApiOperation("分页查询指定读者纸质书借阅记录")
     @GetMapping(value = "/getReadBooksPage/{pageNum}/{pageSize}/{readerId}")

@@ -44,7 +44,7 @@ public interface BorrowBookHisMapper {
     /**
      * 更新读者的借阅状态、还书时间、是否逾期
      **/
-    @Update("UPDATE state, get_back_book_time, boolean_late " +
+    @Update("UPDATE borrow_book_his " +
             "SET state=#{state}, get_back_book_time=#{getBackBookTime}, boolean_late=#{booleanLate} " +
             "WHERE bor_book_id =#{borBookId}")
     int updateBorrowBookHisBean(BorrowBookHis borrowBookHis);

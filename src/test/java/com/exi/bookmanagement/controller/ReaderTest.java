@@ -82,7 +82,7 @@ public class ReaderTest {
         int i1 = readBookHisMapper.insertReadBookHisBean(readBookHis);
         log.info("readBook:{}",readBook);
         log.info("readBookHis:{}",readBookHis);*/
-        List<BorrowBook> borrowBookListByBookIdAndBorBookId = borrowBookMapper.getBorrowBookListByBookIdAndBorBookId(133L);
+        List<BorrowBook> borrowBookListByBookIdAndBorBookId = borrowBookMapper.getAllBorrowBookByBookIdAndBorBookIdAndReaderId();
         log.info("readBookBeanByReaderIdAndEbookId:{}",JSON.toJSONString(borrowBookListByBookIdAndBorBookId));
     }
 
