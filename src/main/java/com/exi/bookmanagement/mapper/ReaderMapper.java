@@ -39,6 +39,10 @@ public interface ReaderMapper {
     @ResultMap(value = "readerMap")
     Reader getOneReaderBean(Long readerId);
 
+    @Select("SELECT * FROM reader WHERE reader_account = #{readerAccount}")
+    @ResultMap(value = "readerMap")
+    Reader getReaderAccount(String readerAccount);
+
     @Select("SELECT * FROM reader WHERE reader_id = #{readerId}")
     @ResultMap(value = "readerMap")
     Reader getTokenForReaderId(Integer readerId);

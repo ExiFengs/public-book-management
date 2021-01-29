@@ -35,6 +35,11 @@ public interface BookManagerMapper {
     @ResultMap(value = "bookManagerMap")
     BookManager getOneBookManagerBeanById(Long bookManagerId);
 
+    @Select("SELECT * FROM book_manager WHERE reader_account = #{readerAccount}")
+    @ResultMap(value = "bookManagerMap")
+    BookManager getOneBookManagerBeanByreaderAccount(String readerAccount);
+
+
     /**
      * 登录的时候入参要为 int，不然框架不识别
      **/

@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -107,6 +108,13 @@ public class BookMangerController {
     @PostMapping("/addBookManager")
     public BookManagerResponse save(@RequestBody BookManager bookManager){
         BookManagerResponse bookManagerResponse = new BookManagerResponse();
+        String readerAccount = bookManager.getReaderAccount();
+        BookManager oneBookManagerBeanByreaderAccount = bookManagerMapper.getOneBookManagerBeanByreaderAccount(readerAccount);
+        if (!ObjectUtils.isEmpty(oneBookManagerBeanByreaderAccount)){
+            bookManagerResponse.setCode(88888);
+            bookManagerResponse.setMessage("该账号已被注册");
+            return bookManagerResponse;
+        }
         try {
             //返回的 id 总为 1 ,result 影响条数, 代码是返回自增主键的？
             bookManager.setRoleId(2L);

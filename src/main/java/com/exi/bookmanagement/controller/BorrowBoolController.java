@@ -72,7 +72,7 @@ public class BorrowBoolController {
         // 如果在获取到数据之后就对数据进行转dto操作的话，会获取不到total数据，所以又定义了一个PageInfo类然后将数据进行属性复制，来获取数据
         PageInfo<BorrowBook> pageInfo1 = new PageInfo<>();
         BeanUtils.copyProperties(new PageInfo<>(borrowBookList), pageInfo1);
-        log.info("封装后的 pageInfo:{}",pageInfo1);
+        log.info("封装后的 pageInfo:{}",JSON.toJSONString(pageInfo1));
         // 定义一个 response 把状态码和 message 加到 response 里面，不然前台会拒绝请求
         borrowBookResponse.setCode(20000);
         borrowBookResponse.setMessage("返回 date 为 返回的是读者纸质书借阅纸质书的记录");
@@ -119,7 +119,6 @@ public class BorrowBoolController {
             try {
                 borrowBook.setReaderId(readerId);
                 borrowBook.setBookId(bookId);
-                borrowBookMapper.insertBorrowBookBean(borrowBook);
                 log.info("readBook:{}", JSON.toJSONString(borrowBook));
                 //获取插入自增主键的 id
                 long borBookId = borrowBook.getBorBookId();
@@ -129,21 +128,34 @@ public class BorrowBoolController {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String giveBookTime = sdf.format(time);
                 borrowBookHis.setGiveBookTime(giveBookTime);
+                Book oneBookBeanById = bookMapper.getOneBookBeanById(bookId);
+                if (oneBookBeanById.getBookRepertory() < borBookNum){
+                    borrowBookResponse.setCode(88888);
+                    borrowBookResponse.setMessage("借阅数量大于库存啦");
+                    return borrowBookResponse;
+                }
                 borrowBookHis.setBorBookNum(borBookNum);
                 String expectGetBackTime1 = sdf.format(expectGetBackTime);
+                if (expectGetBackTime.before(time)){
+                    borrowBookResponse.setCode(88888);
+                    borrowBookResponse.setMessage("预期还书时间必须大于一天哦");
+                    return borrowBookResponse;
+                }
+
                 borrowBookHis.setExpectGetBackTime(expectGetBackTime1);
 
                 borrowBookHis.setBooleanLate(0);
                 borrowBookHis.setState(0);
+                borrowBookMapper.insertBorrowBookBean(borrowBook);
                 borrowBookHisMapper.insertBorrowBookHisBean(borrowBookHis);
 
                 //更新纸质图书库存
-                Book oneBookBeanById = bookMapper.getOneBookBeanById(bookId);
                 oneBookBeanById.setBookRepertory(oneBookBeanById.getBookRepertory() - borBookNum);
                 int i = bookMapper.updateBookBean(oneBookBeanById);
                 if (i == 0){
                     borrowBookResponse.setCode(88888);
                     borrowBookResponse.setMessage("更新纸质图书库存失败啦");
+                    return borrowBookResponse;
                 }
                 log.info("oneBookBeanById:{}", JSON.toJSONString(oneBookBeanById));
                 log.info("borrowBookHis:{}", JSON.toJSONString(borrowBookHis));

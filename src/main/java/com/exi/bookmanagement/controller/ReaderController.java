@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -109,13 +110,21 @@ public class ReaderController {
     @ApiOperation("添加读者信息")
     @PostMapping("/addReader")
     public ReaderResponse save(@RequestBody Reader reader){
+        ReaderResponse readerResponse = new ReaderResponse();
+        //不能有重复的 account
+        String readerAccount = reader.getReaderAccount();
+        Reader readerAccount1 = readerMapper.getReaderAccount(readerAccount);
+        if (!ObjectUtils.isEmpty(readerAccount1)){
+            readerResponse.setCode(88888);
+            readerResponse.setMessage("该账号已被注册");
+            return readerResponse;
+        }
         Date time = new Date(System.currentTimeMillis());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String current = sdf.format(time);
         reader.setRegistrationTime(current);
         reader.setRoleId(1L);
         log.info(JSON.toJSONString(reader + "==========="));
-        ReaderResponse readerResponse = new ReaderResponse();
         try {
             //返回的 id 总为 1 ,result 影响条数, 代码是返回自增主键的？
             int id = readerMapper.insertReaderBean(reader);
