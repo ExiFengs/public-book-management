@@ -1,7 +1,9 @@
 package com.exi.bookmanagement.controller;
 
 import com.exi.bookmanagement.entity.Book;
+import com.exi.bookmanagement.entity.BorrowBook;
 import com.exi.bookmanagement.mapper.BookMapper;
+import com.exi.bookmanagement.mapper.BorrowBookMapper;
 import com.exi.bookmanagement.response.BookResponse;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -12,6 +14,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,6 +45,10 @@ import java.util.List;
 public class BookController {
     @Autowired
     private BookMapper bookMapper;
+
+    @Autowired
+    private BorrowBookMapper borrowBookMapper;
+
 
     @ApiOperation("分页查询纸质图书信息")
     @GetMapping(value = "/getBooksPage/{pageNum}/{pageSize}")
@@ -148,6 +155,12 @@ public class BookController {
     @DeleteMapping(value="/deleteBook/{id}")
     public BookResponse delete(@PathVariable("id") Long id) {
         BookResponse bookResponse = new BookResponse();
+        List<BorrowBook> borrowBookBeanByBookId = borrowBookMapper.getBorrowBookBeanByBookId(id);
+        if (!CollectionUtils.isEmpty(borrowBookBeanByBookId)){
+            bookResponse.setCode(88888);
+            bookResponse.setMessage("还有读者借阅了这本书，暂时删除不了！");
+            return bookResponse;
+        }
         try {
             int result = bookMapper.deleteBookBean(id);
             bookResponse.setResult(result);

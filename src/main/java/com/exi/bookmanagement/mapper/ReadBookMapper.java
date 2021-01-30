@@ -74,4 +74,8 @@ public interface ReadBookMapper {
     @ResultMap(value = "readBookMap")
     List<ReadBook> getReadBookBeansByReaderId(Long readerId);
 
+    @Select("SELECT * FROM read_book WHERE e_book_id = #{eBookId}")
+    @ResultMap(value = "readBookMap")
+    List<ReadBook> getReadBookBeansByEbookId(Long eBookId);
+
 }

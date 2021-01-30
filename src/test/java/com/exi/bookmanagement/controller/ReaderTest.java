@@ -5,6 +5,7 @@ import com.exi.bookmanagement.entity.BorrowBook;
 import com.exi.bookmanagement.entity.Category;
 import com.exi.bookmanagement.entity.Reader;
 import com.exi.bookmanagement.mapper.*;
+import com.exi.bookmanagement.service.IUpdateBorBookStateService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -59,14 +61,18 @@ public class ReaderTest {
     private BorrowBookHisMapper borrowBookHisMapper;
 
     @Autowired
+    private IUpdateBorBookStateService stateService;
+
+    @Autowired
     private ReadBookHisMapper readBookHisMapper;
 
     Logger logger = LoggerFactory.getLogger(ReaderTest.class);
 
 
     @Test
-    public void testBorrowBook(){
-
+    public void testBorrowBook() throws ParseException {
+        int i = stateService.updateBookState();
+        log.error("=====", i);
     }
 
     @Test

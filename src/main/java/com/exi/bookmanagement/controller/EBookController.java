@@ -2,7 +2,9 @@ package com.exi.bookmanagement.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.exi.bookmanagement.entity.EBook;
+import com.exi.bookmanagement.entity.ReadBook;
 import com.exi.bookmanagement.mapper.EBookMapper;
+import com.exi.bookmanagement.mapper.ReadBookMapper;
 import com.exi.bookmanagement.response.EBookResponse;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,6 +46,9 @@ import java.util.List;
 public class EBookController {
     @Autowired
     private EBookMapper eBookMapper;
+
+    @Autowired
+    private ReadBookMapper readBookMapper;
 
     @ApiOperation("分页查询电子图书信息")
     @GetMapping(value = "/getEbooksPage/{pageNum}/{pageSize}")
@@ -150,6 +156,12 @@ public class EBookController {
     @DeleteMapping(value="/deleteEBook/{id}")
     public EBookResponse delete(@PathVariable("id") Long id) {
         EBookResponse eBookResponse = new EBookResponse();
+        List<ReadBook> readBookBeansByEbookId = readBookMapper.getReadBookBeansByEbookId(id);
+        if(!CollectionUtils.isEmpty(readBookBeansByEbookId)){
+            eBookResponse.setCode(88888);
+            eBookResponse.setMessage("有读者读过这本书，暂时不能删除哦");
+            return eBookResponse;
+        }
         try {
             int result = eBookMapper.deleteEBookBean(id);
             eBookResponse.setResult(result);
