@@ -1,6 +1,7 @@
 package com.exi.bookmanagement.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.exi.bookmanagement.entity.Book;
 import com.exi.bookmanagement.entity.BorrowBook;
 import com.exi.bookmanagement.entity.Category;
 import com.exi.bookmanagement.entity.Reader;
@@ -19,6 +20,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *  Copyright: Copyright (c) 2021 Asiainfo
@@ -68,6 +70,16 @@ public class ReaderTest {
 
     Logger logger = LoggerFactory.getLogger(ReaderTest.class);
 
+
+    @Test
+    public void testSeachName(){
+        List<Book> bookLikeNameList = bookMapper.getBookLikeNameList("粤语金曲");
+
+        List<BorrowBook> borrowBookListByBookIdAndBorBookId = borrowBookMapper.getBorrowBookListByBookIdAndBorBookId(133L);
+        borrowBookListByBookIdAndBorBookId.retainAll(bookLikeNameList);
+
+        log.error("交集：{}", JSON.toJSONString(borrowBookListByBookIdAndBorBookId));
+    }
 
     @Test
     public void testBorrowBook() throws ParseException {

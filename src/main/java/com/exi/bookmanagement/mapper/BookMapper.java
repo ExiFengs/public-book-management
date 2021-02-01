@@ -44,13 +44,13 @@ public interface BookMapper {
     @ResultMap(value = "bookMap")
     Book getOneBookBeanById(Long bookId);
 
-    @Select("SELECT * FROM book WHERE category_id = #{category_id}")
+    @Select({"SELECT * FROM book WHERE category_id = #{category_id}"})
     @ResultMap(value = "bookMap")
     Book getOneBookBeanByCategoryId(Long category_id);
 
 
-    @Insert("INSERT INTO book(book_author,book_name, book_repertory, book_picture, book_isbn, book_intro, book_press, category_id) " +
-            "VALUES(#{bookAuthor}, #{bookName}, #{bookRepertory}, #{bookPicture}, #{bookIsbn}, #{bookIntro}, #{bookPress}, #{categoryId})")
+    @Insert({"INSERT INTO book(book_author,book_name, book_repertory, book_picture, book_isbn, book_intro, book_press, category_id) " +
+            "VALUES(#{bookAuthor}, #{bookName}, #{bookRepertory}, #{bookPicture}, #{bookIsbn}, #{bookIntro}, #{bookPress}, #{categoryId})"})
     @Options(useGeneratedKeys = true, keyProperty = "book_id")
     int insertBookBean(Book book);
 
