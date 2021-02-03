@@ -54,8 +54,8 @@ public class AppleEBookController {
     public AppleEBookResponse putAway(@RequestBody AppleEBook appleEBook){
         AppleEBookResponse appleEBookResponse = new AppleEBookResponse();
         appleEBook.setState(1);
+        log.info("appleEBook:{}", JSON.toJSONString(appleEBook));
         EBook eBook = new EBook();
-
         eBook.setEBookAuthor(appleEBook.getEBookAuthor());
         eBook.setEBookIntro(appleEBook.getEBookIntro());
         eBook.setEBookIsbn(appleEBook.getEBookIsbn());

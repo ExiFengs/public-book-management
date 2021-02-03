@@ -84,6 +84,13 @@
             <version>1.2.49</version>
         </dependency>
 
+        <!-- swagger-bootstrap-ui增强ui  -->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>swagger-bootstrap-ui</artifactId>
+            <version>1.9.4</version>
+        </dependency>
+
         <!-- JWT-->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
