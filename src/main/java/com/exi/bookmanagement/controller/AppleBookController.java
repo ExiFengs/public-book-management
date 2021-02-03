@@ -5,8 +5,6 @@ import com.exi.bookmanagement.entity.AppleBook;
 import com.exi.bookmanagement.entity.Book;
 import com.exi.bookmanagement.mapper.AppleBookMapper;
 import com.exi.bookmanagement.mapper.BookMapper;
-import com.exi.bookmanagement.mapper.CategoryMapper;
-import com.exi.bookmanagement.mapper.ReaderMapper;
 import com.exi.bookmanagement.response.AppleBookResponse;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -51,19 +49,11 @@ public class AppleBookController {
     @Autowired
     private BookMapper bookMapper;
 
-    @Autowired
-    private CategoryMapper categoryMapper;
-
-    @Autowired
-    private ReaderMapper readerMapper;
-
     @ApiOperation("上架纸质书籍")
     @PutMapping(value = "/putAway")
     public AppleBookResponse putAway(@RequestBody AppleBook appleBook){
         AppleBookResponse appleBookResponse = new AppleBookResponse();
         appleBook.setState(1);
-        appleBook.setCategory(categoryMapper.getOneCategoryById(appleBook.getCategoryId()));
-        appleBook.setReader(readerMapper.getOneReaderBean(appleBook.getReaderId()));
         Book book = new Book();
         book.setBookRepertory(appleBook.getBookRepertory());
         book.setBookAuthor(appleBook.getBookAuthor());
@@ -101,8 +91,6 @@ public class AppleBookController {
     @PutMapping(value = "/refuse")
     public AppleBookResponse refuse(@RequestBody AppleBook appleBook){
         AppleBookResponse appleBookResponse = new AppleBookResponse();
-        appleBook.setCategory(categoryMapper.getOneCategoryById(appleBook.getCategoryId()));
-        appleBook.setReader(readerMapper.getOneReaderBean(appleBook.getReaderId()));
         appleBook.setState(2);
         try{
             int i = appleBookMapper.updateBookBeanByState(appleBook);

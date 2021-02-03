@@ -16,6 +16,25 @@ public class AppleEBook implements Serializable {
   private long state;
   private long categoryId;
   private long readerId;
+  private Category category;
+  private Reader reader;
+
+
+  public Reader getReader() {
+    return reader;
+  }
+
+  public void setReader(Reader reader) {
+    this.reader = reader;
+  }
+
+  public Category getCategory() {
+    return category;
+  }
+
+  public void setCategory(Category category) {
+    this.category = category;
+  }
 
   public long getReaderId() {
     return readerId;
