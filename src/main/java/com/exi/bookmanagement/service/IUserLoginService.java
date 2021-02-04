@@ -1,5 +1,6 @@
 package com.exi.bookmanagement.service;
 
+import com.exi.bookmanagement.entity.Admin;
 import com.exi.bookmanagement.entity.BookManager;
 import com.exi.bookmanagement.entity.Reader;
 
@@ -21,5 +22,8 @@ public interface IUserLoginService {
     Reader getUserByNameAndPassword(Reader reader);
 
     BookManager getBookMangerByNameAndPassword(BookManager bookManager);
+
+    Admin getAdminByNameAndPassword(Admin admin);
+
 
 }

@@ -1,7 +1,9 @@
 package com.exi.bookmanagement.service.impl;
 
+import com.exi.bookmanagement.entity.Admin;
 import com.exi.bookmanagement.entity.BookManager;
 import com.exi.bookmanagement.entity.Reader;
+import com.exi.bookmanagement.mapper.AdminMapper;
 import com.exi.bookmanagement.mapper.BookManagerMapper;
 import com.exi.bookmanagement.mapper.ReaderMapper;
 import com.exi.bookmanagement.service.IUserLoginService;
@@ -29,6 +31,10 @@ public class UserLoginServiceImpl implements IUserLoginService {
 
     @Autowired
     private BookManagerMapper bookManagerMapper;
+
+    @Autowired
+    private AdminMapper adminMapper;
+
     @Override
     public Reader getUserByNameAndPassword(Reader reader) {
         //校验读者账号和密码
@@ -46,5 +52,14 @@ public class UserLoginServiceImpl implements IUserLoginService {
         BookManager bookManager1 = bookManagerMapper.selectBookManagerAccountAndPassword(readerAccount, readerPassword);
 
         return bookManager1;
+    }
+
+    @Override
+    public Admin getAdminByNameAndPassword(Admin admin) {
+        String readerAccount = admin.getReaderAccount();
+        String readerPassword = admin.getReaderPassword();
+        Admin admin1 = adminMapper.selectAdminAccountAndPassword(readerAccount, readerPassword);
+
+        return admin1;
     }
 }
