@@ -134,6 +134,28 @@ public class AppleEBookController {
         return appleEBookResponse;
     }
 
+    @ApiOperation("分页查询读者纸质图书信息")
+    @GetMapping(value = "/getBooksPageById/{pageNum}/{pageSize}/{readerId}")
+    public AppleEBookResponse getBooksPage(@PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize, @PathVariable("readerId")Long readerId){
+        Page<AppleEBook> pageInfo = PageHelper.startPage(pageNum, pageSize);
+        if (pageInfo.getPageNum() == 0 || pageInfo.getPageSize() == 0) {
+            log.info("pageNum || pageSize 有值为空");
+        }
+        //并查询
+        PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+        List<AppleEBook> appleBookList = appleEBookMapper.getAppleEBookById(readerId);
+        // 如果在获取到数据之后就对数据进行转dto操作的话，会获取不到total数据，所以又定义了一个PageInfo类然后将数据进行属性复制，来获取数据
+        PageInfo<AppleEBook> pageInfo1 = new PageInfo<>();
+        BeanUtils.copyProperties(new PageInfo<>(appleBookList), pageInfo1);
+        log.info("封装后的 pageInfo:{}",pageInfo1);
+        // 定义一个 response 把状态码和 message 加到 response 里面，不然前台会拒绝请求
+        AppleEBookResponse appleEBookResponse = new AppleEBookResponse();
+        appleEBookResponse.setCode(20000);
+        appleEBookResponse.setMessage("返回 date 为 appleBookList 的分页List");
+        appleEBookResponse.setPageInfo(pageInfo1);
+        return appleEBookResponse;
+    }
+
     @ApiOperation("按名称查询纸质图书信息")
     @GetMapping(value = "/getBookLikeNameList/{bookName}")
     public AppleEBookResponse getBookLikeNameList(@PathVariable("bookName") String bookName){

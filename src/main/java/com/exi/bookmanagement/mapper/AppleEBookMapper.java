@@ -19,7 +19,6 @@ import java.util.List;
  * ----------------------------------------------------------
  * 2021/2/1    Fengsx     v1.0.0      修改原因
  */
-@CacheNamespace(blocking = true)
 public interface AppleEBookMapper {
     @Select("SELECT * FROM apple_e_book")
     @Results(id = "EbookMap", value = {
@@ -40,6 +39,11 @@ public interface AppleEBookMapper {
                     one=@One(select="com.exi.bookmanagement.mapper.ReaderMapper.getOneReaderBean"))
     })
     List<AppleEBook> getAllEBookBean();
+
+    @Select("SELECT * FROM apple_e_book WHERE reader_Id = #{readerId}")
+    @ResultMap(value = "EbookMap")
+    List<AppleEBook> getAppleEBookById(Long readerId);
+
 
     @Select("SELECT * FROM apple_e_book WHERE e_book_id = #{eBookId}")
     @ResultMap(value = "EbookMap")
