@@ -3,6 +3,7 @@ package com.exi.bookmanagement.controller;
 import com.exi.bookmanagement.entity.Book;
 import com.exi.bookmanagement.entity.BorrowBook;
 import com.exi.bookmanagement.mapper.BookMapper;
+import com.exi.bookmanagement.mapper.BorrowBookHisMapper;
 import com.exi.bookmanagement.mapper.BorrowBookMapper;
 import com.exi.bookmanagement.response.BookResponse;
 import com.github.pagehelper.Page;
@@ -48,6 +49,9 @@ public class BookController {
 
     @Autowired
     private BorrowBookMapper borrowBookMapper;
+
+    @Autowired
+    private BorrowBookHisMapper borrowBookHisMapper;
 
 
     @ApiOperation("分页查询纸质图书信息")

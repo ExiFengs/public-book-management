@@ -1,9 +1,9 @@
 package com.exi.bookmanagement.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.exi.bookmanagement.entity.Book;
-import com.exi.bookmanagement.entity.Category;
-import com.exi.bookmanagement.entity.EBook;
+import com.exi.bookmanagement.entity.*;
+import com.exi.bookmanagement.mapper.AppleBookMapper;
+import com.exi.bookmanagement.mapper.AppleEBookMapper;
 import com.exi.bookmanagement.mapper.CategoryMapper;
 import com.exi.bookmanagement.response.CategoryResponse;
 import com.github.pagehelper.Page;
@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,6 +43,12 @@ import java.util.List;
 public class CategoryController {
     @Autowired
     private CategoryMapper categoryMapper;
+
+    @Autowired
+    private AppleEBookMapper appleEBookMapper;
+
+    @Autowired
+    private AppleBookMapper appleBookMapper;
 
     @ApiOperation("分页查询纸质图书分类信息")
     @GetMapping(value = "/getCategoryPage/{pageNum}/{pageSize}")
@@ -166,8 +173,11 @@ public class CategoryController {
         CategoryResponse categoryResponse = new CategoryResponse();
         try {
             Category oneCategoryById = categoryMapper.getOneCategoryByBookCategoryId(id);
-            //如果此时电子书和纸质书都没使用到该类别，则该类别可以进行删除
-            if (CollectionUtils.isEmpty(oneCategoryById.getBookList()) && CollectionUtils.isEmpty(oneCategoryById.geteBookList())){
+            AppleBook oneBookBeanByCategoryId = appleBookMapper.getOneBookBeanByCategoryId(id);
+            AppleEBook oneEBookBeanByCategotyId = appleEBookMapper.getOneEBookBeanByCategotyId(id);
+            //如果此时电子书和纸质书和捐赠的书籍都没使用到该类别，则该类别可以进行删除
+            if (CollectionUtils.isEmpty(oneCategoryById.getBookList()) && CollectionUtils.isEmpty(oneCategoryById.geteBookList())
+                    && ObjectUtils.isEmpty(oneBookBeanByCategoryId) && ObjectUtils.isEmpty(oneEBookBeanByCategotyId)){
                 int result = categoryMapper.deleteCategoryBean(id);
                 categoryResponse.setResult(result);
                 categoryResponse.setCode(20000);
