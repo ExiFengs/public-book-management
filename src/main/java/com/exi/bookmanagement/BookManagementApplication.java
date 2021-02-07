@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.util.StringUtils;
 import springfox.documentation.oas.annotations.EnableOpenApi;
 
@@ -15,6 +16,8 @@ import java.net.UnknownHostException;
 @EnableOpenApi
 @SpringBootApplication
 @MapperScan("com.exi.bookmanagement.mapper")
+// 开启任务调度
+@EnableScheduling
 @Slf4j
 public class BookManagementApplication {
 

@@ -5,6 +5,7 @@ import com.exi.bookmanagement.mapper.BorrowBookHisMapper;
 import com.exi.bookmanagement.service.IUpdateBorBookStateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -32,8 +33,11 @@ public class UpdateBorBookStateServiceImpl implements IUpdateBorBookStateService
     @Autowired
     private BorrowBookHisMapper borrowBookHisMapper;
 
+    //每月每天凌晨3点触发
+    @Scheduled(cron = "0 0 3 * * ?")
     @Override
     public int updateBookState() throws ParseException {
+        log.info("执行定时更新借阅状态代码");
         List<BorrowBookHis> allBorrowBookHis = borrowBookHisMapper.getAllBorrowBookHis();
         for (BorrowBookHis b:
              allBorrowBookHis) {
