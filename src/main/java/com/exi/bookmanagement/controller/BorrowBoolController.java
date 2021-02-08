@@ -58,6 +58,26 @@ public class BorrowBoolController {
     private IUpdateBorBookStateService updateBorBookStateService;
 
 
+    @ApiOperation("读者借书")
+    @GetMapping(value = "/borrowBook/{borBookId}")
+    public BorrowBookResponse borrowBook(@PathVariable("borBookId") Long borBookId) throws ParseException {
+        BorrowBookResponse borrowBookResponse = new BorrowBookResponse();
+        BorrowBookHis oneBorrowBookHisBean = borrowBookHisMapper.getOneBorrowBookHisBean(borBookId);
+        oneBorrowBookHisBean.setState(4);
+        try{
+            borrowBookHisMapper.updateBorrowBookHisBean(oneBorrowBookHisBean);
+            borrowBookResponse.setCode(20000);
+            borrowBookResponse.setMessage("借书成功~");
+            return borrowBookResponse;
+        }catch (Exception e){
+            e.printStackTrace();
+            borrowBookResponse.setCode(88888);
+            borrowBookResponse.setMessage("借书失败");
+            return borrowBookResponse;
+        }
+
+    }
+
     @ApiOperation("读者还书")
     @GetMapping(value = "/getBackBook/{borBookId}")
     public BorrowBookResponse getBackBook(@PathVariable("borBookId") Long borBookId) throws ParseException {

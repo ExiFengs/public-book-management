@@ -23282,3 +23282,14 @@ Unconditional classes:
 	----------------------------------------------------------
 2021-02-07 12:07:24.062 [RMI TCP Connection(3)-127.0.0.1] DEBUG o.s.core.env.PropertySourcesPropertyResolver - Found key 'local.server.port' in PropertySource 'server.ports' with value of type Integer
 2021-02-07 12:07:24.075 [RMI TCP Connection(3)-127.0.0.1] DEBUG o.s.core.env.PropertySourcesPropertyResolver - Found key 'server.servlet.context-path' in PropertySource 'configurationProperties' with value of type String
+2021-02-07 12:12:00.109 [SpringContextShutdownHook] DEBUG o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Closing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@3e6ef8ad, started on Sun Feb 07 12:07:16 CST 2021
+2021-02-07 12:12:00.110 [SpringContextShutdownHook] DEBUG o.s.core.env.PropertySourcesPropertyResolver - Found key 'spring.liveBeansView.mbeanDomain' in PropertySource 'systemProperties' with value of type String
+2021-02-07 12:12:00.117 [SpringContextShutdownHook] DEBUG o.s.context.support.DefaultLifecycleProcessor - Stopping beans in phase 2147483647
+2021-02-07 12:12:00.118 [SpringContextShutdownHook] DEBUG o.s.context.support.DefaultLifecycleProcessor - Bean 'documentationPluginsBootstrapper' completed its stop procedure
+2021-02-07 12:12:00.119 [SpringContextShutdownHook] DEBUG o.s.context.support.DefaultLifecycleProcessor - Bean 'webServerGracefulShutdown' completed its stop procedure
+2021-02-07 12:12:00.119 [SpringContextShutdownHook] DEBUG o.s.context.support.DefaultLifecycleProcessor - Stopping beans in phase 2147483646
+2021-02-07 12:12:01.325 [SpringContextShutdownHook] DEBUG o.s.context.support.DefaultLifecycleProcessor - Bean 'webServerStartStop' completed its stop procedure
+2021-02-07 12:12:01.328 [SpringContextShutdownHook] INFO  o.s.scheduling.concurrent.ThreadPoolTaskScheduler - Shutting down ExecutorService 'taskScheduler'
+2021-02-07 12:12:01.329 [SpringContextShutdownHook] DEBUG o.s.jmx.export.annotation.AnnotationMBeanExporter - Unregistering JMX-exposed beans on shutdown
+2021-02-07 12:12:01.330 [SpringContextShutdownHook] DEBUG o.s.jmx.export.annotation.AnnotationMBeanExporter - Unregistering JMX-exposed beans
+2021-02-07 12:12:01.331 [SpringContextShutdownHook] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
