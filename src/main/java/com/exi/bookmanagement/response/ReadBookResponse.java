@@ -1,5 +1,6 @@
 package com.exi.bookmanagement.response;
 
+import com.exi.bookmanagement.entity.EBook;
 import com.exi.bookmanagement.entity.ReadBook;
 import com.exi.bookmanagement.entity.ReadBookHis;
 import com.github.pagehelper.PageInfo;
@@ -34,6 +35,7 @@ public class ReadBookResponse implements Serializable {
     private long readNum;
     private String eBookName;
     private String readerName;
+    private EBook eBook;
     private ReadBook readBook;
     private ReadBookHis readBookHis;
     private List<ReadBook> readBookList;
@@ -44,6 +46,13 @@ public class ReadBookResponse implements Serializable {
     private String eBookRealFileName;
     private List<String> fileNames;
 
+    public EBook geteBook() {
+        return eBook;
+    }
+
+    public void seteBook(EBook eBook) {
+        this.eBook = eBook;
+    }
 
     public PageInfo getPageInfo() {
         return pageInfo;

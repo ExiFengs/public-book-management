@@ -1,8 +1,10 @@
 package com.exi.bookmanagement.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.exi.bookmanagement.entity.EBook;
 import com.exi.bookmanagement.entity.ReadBook;
 import com.exi.bookmanagement.entity.ReadBookHis;
+import com.exi.bookmanagement.mapper.EBookMapper;
 import com.exi.bookmanagement.mapper.ReadBookHisMapper;
 import com.exi.bookmanagement.mapper.ReadBookMapper;
 import com.exi.bookmanagement.response.ReadBookResponse;
@@ -45,6 +47,9 @@ public class ReadBookController {
 
     @Autowired
     private ReadBookHisMapper readBookHisMapper;
+
+    @Autowired
+    private EBookMapper eBookMapper;
 
 
     @ApiOperation("分页查询指定读者电子图书阅读记录")
@@ -138,6 +143,8 @@ public class ReadBookController {
         ReadBook readBook = new ReadBook();
         ReadBookHis readBookHis = new ReadBookHis();
         ReadBook readBookBeanByReaderId = readBookMapper.getReadBookBeanByReaderIdAndEbookId(readerId,eBookId);
+        EBook oneEBookBeanById = eBookMapper.getOneEBookBeanById(eBookId);
+
         //判断是否是第一次阅读
         if (ObjectUtils.isEmpty(readBookBeanByReaderId)){
             try {
@@ -151,6 +158,7 @@ public class ReadBookController {
                 readBookHis.setReadNum(1L);
                 readBookHisMapper.insertReadBookHisBean(readBookHis);
                 log.info("readBookHis:{}",JSON.toJSONString(readBookHis));
+                readBookResponse.seteBook(oneEBookBeanById);
                 readBookResponse.setReadBook(readBook);
                 readBookResponse.setReadBookHis(readBookHis);
                 readBookResponse.setCode(20000);
@@ -169,6 +177,7 @@ public class ReadBookController {
             oneReadBookHisBean.setReadNum(oneReadBookHisBean.getReadNum() + 1);
             int i = readBookHisMapper.updateReadBookHisBean(oneReadBookHisBean);
             if (i != 0){
+                readBookResponse.seteBook(oneEBookBeanById);
                 readBookResponse.setReadBook(readBookBeanByReaderId);
                 readBookResponse.setReadBookHis(oneReadBookHisBean);
                 readBookResponse.setCode(20000);
