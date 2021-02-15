@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,7 @@ import java.util.List;
 @Api(tags = "读者阅读电子书管理")
 @RestController
 @CrossOrigin
+@Transactional
 @Slf4j
 @RequestMapping(value = "/readBook")
 public class ReadBookController {

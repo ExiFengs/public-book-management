@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,7 @@ import java.util.List;
 @Api(tags = "图书管理员管理")
 @RestController
 @CrossOrigin
+@Transactional
 @Slf4j
 @RequestMapping(value = "/bookManager")
 public class BookMangerController {

@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +43,7 @@ import java.util.List;
 @Api(tags = "读者借阅纸质书管理")
 @RestController
 @CrossOrigin
+@Transactional
 @Slf4j
 @RequestMapping(value = "/borrowBook")
 public class BorrowBoolController {
@@ -64,8 +66,14 @@ public class BorrowBoolController {
         BorrowBookResponse borrowBookResponse = new BorrowBookResponse();
         BorrowBookHis oneBorrowBookHisBean = borrowBookHisMapper.getOneBorrowBookHisBean(borBookId);
         oneBorrowBookHisBean.setState(4);
+        //借书时间
+        Date time = new Date(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String giveBookTime = sdf.format(time);
+        oneBorrowBookHisBean.setGiveBookTime(giveBookTime);
         try{
             borrowBookHisMapper.updateBorrowBookHisBean(oneBorrowBookHisBean);
+            log.info("oneBorrowBookHisBean:{}",JSON.toJSONString(oneBorrowBookHisBean));
             borrowBookResponse.setCode(20000);
             borrowBookResponse.setMessage("借书成功~");
             return borrowBookResponse;
@@ -194,6 +202,7 @@ public class BorrowBoolController {
 
     //读者点击纸质书借阅纸质书按钮
     @ApiOperation("生成纸质书借阅记录")
+    @Transactional
     @GetMapping(value = "/updateBorrowBookReadHis/{readerId}/{bookId}/{expectGetBackTime}/{borBookNum}")
     public BorrowBookResponse updateBorrowBookReadHis(@PathVariable("readerId")Long readerId, @PathVariable("bookId")Long bookId,
                                                       @PathVariable("expectGetBackTime")Date expectGetBackTime, @PathVariable("borBookNum")Long borBookNum){
@@ -205,11 +214,11 @@ public class BorrowBoolController {
                 borrowBook.setBookId(bookId);
                 log.info("readBook:{}", JSON.toJSONString(borrowBook));
 
-                //借书时间即当前时间
+                //预约借书时间即当前时间
                 Date time = new Date(System.currentTimeMillis());
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String giveBookTime = sdf.format(time);
-                borrowBookHis.setGiveBookTime(giveBookTime);
+                borrowBookHis.setSubscribeTime(giveBookTime);
                 Book oneBookBeanById = bookMapper.getOneBookBeanById(bookId);
                 if (oneBookBeanById.getBookRepertory() < borBookNum){
                     borrowBookResponse.setCode(88888);
@@ -251,6 +260,7 @@ public class BorrowBoolController {
                 borrowBookResponse.setMessage("返回的是生成第一次的纸质书借阅记录");
                 return borrowBookResponse;
             }catch (Exception e){
+                System.out.println(e);
                 borrowBookResponse.setCode(888888);
                 borrowBookResponse.setMessage("生成第一次纸质书借阅记录出错啦");
                 return borrowBookResponse;

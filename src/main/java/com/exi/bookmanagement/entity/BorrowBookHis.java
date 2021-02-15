@@ -11,8 +11,16 @@ public class BorrowBookHis implements Serializable {
   private String expectGetBackTime;
   private String giveBookTime;
   private String getBackBookTime;
+  private String subscribeTime;
   private long state;
 
+  public String getSubscribeTime() {
+    return subscribeTime;
+  }
+
+  public void setSubscribeTime(String subscribeTime) {
+    this.subscribeTime = subscribeTime;
+  }
 
   public long getBorBookId() {
     return borBookId;
