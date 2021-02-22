@@ -145,7 +145,6 @@ public class AppleBookController {
         //并查询
         PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         List<AppleBook> appleBookList = appleBookMapper.getBookBeanById(readerId);
-        // 如果在获取到数据之后就对数据进行转dto操作的话，会获取不到total数据，所以又定义了一个PageInfo类然后将数据进行属性复制，来获取数据
         PageInfo<AppleBook> pageInfo1 = new PageInfo<>();
         BeanUtils.copyProperties(new PageInfo<>(appleBookList), pageInfo1);
         log.info("封装后的 pageInfo:{}",pageInfo1);

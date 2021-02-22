@@ -1,8 +1,8 @@
 package com.exi.bookmanagement.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.exi.bookmanagement.entity.Reader;
-import com.exi.bookmanagement.mapper.ReaderMapper;
+import com.exi.bookmanagement.entity.*;
+import com.exi.bookmanagement.mapper.*;
 import com.exi.bookmanagement.response.ReaderResponse;
 import com.exi.bookmanagement.service.IUserLoginService;
 import com.exi.bookmanagement.utils.JwtUtils;
@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +54,20 @@ public class ReaderController {
 
     @Autowired
     private IUserLoginService readerService;
+
+    @Autowired
+    private BorrowBookMapper borrowBookMapper;
+
+    @Autowired
+    private ReadBookMapper readBookMapper;
+
+    @Autowired
+    private AppleBookMapper appleBookMapper;
+
+    @Autowired
+    private AppleEBookMapper appleEBookMapper;
+
+
 
     @ApiOperation("分页查询读者信息")
     @GetMapping(value = "/getReadersPage/{pageNum}/{pageSize}")
@@ -114,13 +130,15 @@ public class ReaderController {
     public ReaderResponse save(@RequestBody Reader reader){
         ReaderResponse readerResponse = new ReaderResponse();
         //不能有重复的 account
-        String readerAccount = reader.getReaderAccount();
-        Reader readerAccount1 = readerMapper.getReaderAccount(readerAccount);
+        Reader readerAccount1 = readerMapper.getReaderAccount(reader.getReaderAccount());
         if (!ObjectUtils.isEmpty(readerAccount1)){
             readerResponse.setCode(88888);
             readerResponse.setMessage("该账号已被注册");
             return readerResponse;
         }
+        //对密码进行加密
+        String md5Password = DigestUtils.md5DigestAsHex(reader.getReaderPassword().getBytes());
+        reader.setReaderPassword(md5Password);
         Date time = new Date(System.currentTimeMillis());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String current = sdf.format(time);
@@ -150,6 +168,9 @@ public class ReaderController {
     public ReaderResponse update(@RequestBody Reader reader) {
         ReaderResponse readerResponse = new ReaderResponse();
         try {
+            //对密码进行加密
+            String md5Password = DigestUtils.md5DigestAsHex(reader.getReaderPassword().getBytes());
+            reader.setReaderPassword(md5Password);
             int result = readerMapper.updateReaderBean(reader);
             log.info("更新后的reader:{}",reader);
             readerResponse.setResult(result);
@@ -173,6 +194,23 @@ public class ReaderController {
     public ReaderResponse delete(@PathVariable("id") Long id) {
         ReaderResponse readerResponse = new ReaderResponse();
         try {
+            //捐书判断
+            List<AppleBook> bookList = appleBookMapper.getBookBeanById(id);
+            List<AppleEBook> eBookList = appleEBookMapper.getAppleEBookById(id);
+            if (!CollectionUtils.isEmpty(bookList) || !CollectionUtils.isEmpty(eBookList)) {
+                readerResponse.setMessage("该读者有捐赠过书籍，不能删除！");
+                readerResponse.setCode(888888);
+                return readerResponse;
+            }
+            //借书和读书判断
+            List<BorrowBook> borrowBookListByBookIdAndBorBookId = borrowBookMapper.getBorrowBookListByBookIdAndBorBookId(id);
+            List<ReadBook> readBookBeansByReaderId = readBookMapper.getReadBookBeansByReaderId(id);
+            if (!CollectionUtils.isEmpty(borrowBookListByBookIdAndBorBookId) || !CollectionUtils.isEmpty(readBookBeansByReaderId)){
+                readerResponse.setMessage("该读者有借过纸质图书或者阅读过某本电子书籍，不能删除！");
+                readerResponse.setCode(888888);
+                return readerResponse;
+            }
+
             int result = readerMapper.deleteReaderBean(id);
             readerResponse.setResult(result);
             readerResponse.setCode(20000);
@@ -184,6 +222,7 @@ public class ReaderController {
             }
         }catch (Exception e){
             log.info("删除读者信息出问题啦");
+            readerResponse.setMessage("删除读者信息出问题啦");
         }
         return readerResponse;
     }

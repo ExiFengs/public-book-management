@@ -37,7 +37,7 @@ public interface BorrowBookMapper {
     void insertBorrowBookBean(BorrowBook borrowBook);
 
     /**
-     * 根据读者查询对应的电子书阅读记录
+     * 根据读者查询对应的纸质书借阅记录
      **/
     @Select("SELECT * FROM borrow_book WHERE reader_id = #{readerId}")
     @Results(value = {

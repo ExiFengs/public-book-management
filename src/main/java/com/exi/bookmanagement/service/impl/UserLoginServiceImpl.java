@@ -9,6 +9,7 @@ import com.exi.bookmanagement.mapper.ReaderMapper;
 import com.exi.bookmanagement.service.IUserLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 /**
  * Copyright: Copyright (c) 2021 Asiainfo
@@ -39,8 +40,9 @@ public class UserLoginServiceImpl implements IUserLoginService {
     public Reader getUserByNameAndPassword(Reader reader) {
         //校验读者账号和密码
         String readerAccount = reader.getReaderAccount();
-        String readerPassword = reader.getReaderPassword();
-        Reader reader1 = readerMapper.selectReaderAccountAndPassword(readerAccount, readerPassword);
+        //加密 md5
+        String md5Password = DigestUtils.md5DigestAsHex(reader.getReaderPassword().getBytes());
+        Reader reader1 = readerMapper.selectReaderAccountAndPassword(readerAccount, md5Password);
 
         return reader1;
     }
