@@ -43,25 +43,22 @@ public class UserLoginServiceImpl implements IUserLoginService {
         //加密 md5
         String md5Password = DigestUtils.md5DigestAsHex(reader.getReaderPassword().getBytes());
         Reader reader1 = readerMapper.selectReaderAccountAndPassword(readerAccount, md5Password);
-
         return reader1;
     }
 
     @Override
     public BookManager getBookMangerByNameAndPassword(BookManager bookManager) {
         String readerAccount = bookManager.getReaderAccount();
-        String readerPassword = bookManager.getReaderPassword();
-        BookManager bookManager1 = bookManagerMapper.selectBookManagerAccountAndPassword(readerAccount, readerPassword);
-
+        String md5Password = DigestUtils.md5DigestAsHex(bookManager.getReaderPassword().getBytes());
+        BookManager bookManager1 = bookManagerMapper.selectBookManagerAccountAndPassword(readerAccount, md5Password);
         return bookManager1;
     }
 
     @Override
     public Admin getAdminByNameAndPassword(Admin admin) {
         String readerAccount = admin.getReaderAccount();
-        String readerPassword = admin.getReaderPassword();
-        Admin admin1 = adminMapper.selectAdminAccountAndPassword(readerAccount, readerPassword);
-
+        String md5Password = DigestUtils.md5DigestAsHex(admin.getReaderPassword().getBytes());
+        Admin admin1 = adminMapper.selectAdminAccountAndPassword(readerAccount, md5Password);
         return admin1;
     }
 }

@@ -2,8 +2,8 @@ package com.exi.bookmanagement.controller;
 
 import com.exi.bookmanagement.entity.Book;
 import com.exi.bookmanagement.entity.BorrowBook;
+import com.exi.bookmanagement.mapper.AppleBookMapper;
 import com.exi.bookmanagement.mapper.BookMapper;
-import com.exi.bookmanagement.mapper.BorrowBookHisMapper;
 import com.exi.bookmanagement.mapper.BorrowBookMapper;
 import com.exi.bookmanagement.response.BookResponse;
 import com.github.pagehelper.Page;
@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -53,8 +54,7 @@ public class BookController {
     private BorrowBookMapper borrowBookMapper;
 
     @Autowired
-    private BorrowBookHisMapper borrowBookHisMapper;
-
+    private AppleBookMapper appleBookMapper;
 
     @ApiOperation("分页查询纸质图书信息")
     @GetMapping(value = "/getBooksPage/{pageNum}/{pageSize}")
@@ -116,6 +116,12 @@ public class BookController {
     @PostMapping("/addBook")
     public BookResponse save(@RequestBody Book book){
         BookResponse bookResponse = new BookResponse();
+        if (StringUtils.isEmpty(book.getBookPicture())){
+            log.info("你没有上传纸质图书照片");
+            bookResponse.setCode(888888);
+            bookResponse.setMessage("你没有上传纸质图书照片");
+            return bookResponse;
+        }
         try {
             //返回的 id 总为 1 ,result 影响条数, 代码是返回自增主键的？
             int id = bookMapper.insertBookBean(book);

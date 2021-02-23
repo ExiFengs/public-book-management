@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ResourceUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -113,6 +114,12 @@ public class EBookController {
     @PostMapping("/addEBook")
     public EBookResponse save(@RequestBody EBook ebook){
         EBookResponse eBookResponse = new EBookResponse();
+        if (StringUtils.isEmpty(ebook.getEBookFileUrl())){
+            log.info("添加电子图书信息出问题啦");
+            eBookResponse.setCode(888888);
+            eBookResponse.setMessage("你没有上传电子书文件");
+            return eBookResponse;
+        }
         try {
             //返回的 id 总为 1 ,result 影响条数, 代码是返回自增主键的？
             int id = eBookMapper.insertEBookBean(ebook);

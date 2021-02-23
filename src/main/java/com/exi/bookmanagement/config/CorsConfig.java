@@ -27,7 +27,7 @@ public class CorsConfig implements WebMvcConfigurer{
     public void addCorsMappings(CorsRegistry registry) {
         WebMvcConfigurer.super.addCorsMappings(registry);
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:9528","null")
+                .allowedOrigins("http://localhost:9528","http://localhost:9529","http://localhost:9530")
                 .allowedMethods("POST","GET","PUT","OPTIONS","DELETE")
                 // 最大响应时间
                 .maxAge(3600)

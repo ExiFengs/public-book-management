@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -96,8 +97,8 @@ public class BookMangerController {
     }
 
     @ApiOperation("按id查询图书管理员信息")
-    @GetMapping(value = "/getBookManagerById/{BookManagerId}")
-    public BookManagerResponse getBookManagerById(@PathVariable("BookManagerId") Long bookManagerId) {
+    @GetMapping(value = "/getBookManagerById/{bookManagerId}")
+    public BookManagerResponse getBookManagerById(@PathVariable("bookManagerId") Long bookManagerId) {
         BookManager bookManager =bookManagerMapper.getOneBookManagerBeanById(bookManagerId);
         BookManagerResponse bookManagerResponse = new BookManagerResponse();
         bookManagerResponse.setBookManager(bookManager);
@@ -141,6 +142,9 @@ public class BookMangerController {
     public BookManagerResponse update(@RequestBody BookManager bookManager) {
         BookManagerResponse bookManagerResponse = new BookManagerResponse();
         try {
+            //对密码进行加密
+            String md5Password = DigestUtils.md5DigestAsHex(bookManager.getReaderPassword().getBytes());
+            bookManager.setReaderPassword(md5Password);
             int result = bookManagerMapper.updateBookManagerBean(bookManager);
             log.info("更新后的bookManager:{}",bookManager);
             bookManagerResponse.setResult(result);
@@ -192,9 +196,7 @@ public class BookMangerController {
         }
         // 根据用户名、密码查询数据
         BookManager loginBookManager = bookLoginService.getBookMangerByNameAndPassword(bookManager);
-
         log.info("查到的图书管理员数据：" + loginBookManager);
-
         if (loginBookManager == null){
             bookManagerResponse.setCode(888888);
             bookManagerResponse.setMessage("用户名或密码错误");
@@ -202,7 +204,7 @@ public class BookMangerController {
         }else if (loginBookManager != null){
             System.out.println(("登录的图书管理员的 id 为："+loginBookManager.getBookManagerId()));
             // 生成token
-            String jwtToken = JwtUtils.getJwtToken(loginBookManager.getBookManagerId(), loginBookManager.getReaderAccount());
+            String jwtToken = JwtUtils.getBookManagerJwtToken(loginBookManager.getBookManagerId(), loginBookManager.getReaderAccount());
             System.out.println("返回的 token 为：" + jwtToken);
             bookManagerResponse.setBookManager(loginBookManager);
             bookManagerResponse.setToken(jwtToken);
@@ -214,11 +216,11 @@ public class BookMangerController {
     }
 
     @ApiOperation("前端返回 token 后台接收")
-    @GetMapping(value = "/getBookManagerInfo")
+    @PostMapping(value = "/getBookManagerInfo")
     public BookManagerResponse getBookManagerInfo(@RequestBody HttpServletRequest request){
-        log.info("这是请求{} ", request.getParameter("token"));
-        Integer bookManagerId = JwtUtils.getMemberIdByJwtToken(request);
-        System.out.println("bookManagerId 为：：：：：" + bookManagerId);
+        log.info("这是后台接收请求的 token{} ", request.getParameter("token"));
+        Integer bookManagerId = JwtUtils.getBookManagerIdByJwtToken(request);
+        System.out.println("bookManagerId 为：" + bookManagerId);
         BookManagerResponse bookManagerResponse = new BookManagerResponse();
         BookManager bookManager = bookManagerMapper.getTokenForBookManagerId(bookManagerId);
         bookManagerResponse.setBookManager(bookManager);
