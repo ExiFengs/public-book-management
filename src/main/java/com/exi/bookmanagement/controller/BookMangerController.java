@@ -121,6 +121,9 @@ public class BookMangerController {
         try {
             //返回的 id 总为 1 ,result 影响条数, 代码是返回自增主键的？
             bookManager.setRoleId(2L);
+            //对密码进行加密
+            String md5Password = DigestUtils.md5DigestAsHex(bookManager.getReaderPassword().getBytes());
+            bookManager.setReaderPassword(md5Password);
             int id = bookManagerMapper.insertBookManagerBean(bookManager);
             bookManagerResponse.setBookManager(bookManager);
             bookManagerResponse.setResult(id);

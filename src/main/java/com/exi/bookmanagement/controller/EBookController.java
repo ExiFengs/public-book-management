@@ -143,6 +143,11 @@ public class EBookController {
     public EBookResponse update(@RequestBody EBook ebook) {
         EBookResponse eBookResponse = new EBookResponse();
         try {
+            if (ebook.getEBookFileUrl().isEmpty()){
+                eBookResponse.setCode(888888);
+                eBookResponse.setMessage("请修改电子书的文件");
+                return eBookResponse;
+            }
             int result = eBookMapper.updateEBookBean(ebook);
             log.info("ebook:{}",ebook);
             eBookResponse.setResult(result);

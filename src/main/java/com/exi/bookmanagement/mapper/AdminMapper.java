@@ -1,7 +1,6 @@
 package com.exi.bookmanagement.mapper;
 
 import com.exi.bookmanagement.entity.Admin;
-import com.exi.bookmanagement.entity.BookManager;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -20,7 +19,6 @@ import java.util.List;
  * ----------------------------------------------------------
  * 2021/2/3    Fengsx     v1.0.0      修改原因
  */
-@CacheNamespace(blocking = true)
 public interface AdminMapper {
     @Select("SELECT * FROM admin")
     @Results(id = "adminMap", value = {
@@ -35,4 +33,11 @@ public interface AdminMapper {
     @Select("SELECT * FROM admin WHERE admin.reader_account = #{readerAccount} AND admin.reader_password = #{readerPassword}")
     @ResultMap(value = "adminMap")
     Admin selectAdminAccountAndPassword(String readerAccount, String readerPassword);
+
+    /**
+     * 登录的时候入参要为 int，不然框架不识别
+     **/
+    @Select("SELECT * FROM admin WHERE admin_Id = #{adminId}")
+    @ResultMap(value = "adminMap")
+    Admin getTokenForAdminId(Integer adminId);
 }

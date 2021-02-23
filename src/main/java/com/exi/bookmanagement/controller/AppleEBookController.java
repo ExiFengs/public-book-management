@@ -220,6 +220,11 @@ public class AppleEBookController {
     public AppleEBookResponse update(@RequestBody AppleEBook book) {
         AppleEBookResponse appleEBookResponse = new AppleEBookResponse();
         try {
+            if (book.getEBookFileUrl().isEmpty()){
+                appleEBookResponse.setCode(888888);
+                appleEBookResponse.setMessage("请修改电子书的文件");
+                return appleEBookResponse;
+            }
             int result = appleEBookMapper.updateEBookBean(book);
             log.info("更新后的book:{}",book);
             appleEBookResponse.setResult(result);

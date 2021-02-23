@@ -25,9 +25,10 @@ import java.util.Date;
  * 2021/1/17    Fengsx     v1.0.0      修改原因
  */
 public class JwtUtils {
-    //常量
-    public static final long EXPIRE = 1000 * 60 * 60 * 24; //token过期时间, 这里设置的是一天的有效时间
-    public static final String APP_SECRET = "ukc8BDbRigUDaY6pZFfWus2jZWLPHO"; //秘钥，自己随便设
+    //token过期时间, 这里设置的是一天的有效时间
+    public static final long EXPIRE = 1000 * 60 * 60 * 24;
+    //秘钥，自己随便设
+    public static final String APP_SECRET = "ukc8BDbRigUDaY6pZFfWus2jZWLPHO";
 
     //生成token字符串的方法
     public static String getJwtToken(Long readerId, String readerAccount){
@@ -36,13 +37,12 @@ public class JwtUtils {
                 // JWT的头信息
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("alg", "HS256")
-
                 // 设置过期时间
                 .setSubject("onlineCourse-user")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE))
-                // 数据库中的字段
-                .claim("reader_id", readerId)  //设置token主体部分 ，存储用户信息
+                // 数据库中的字段,设置token主体部分 ，存储用户信息
+                .claim("reader_id", readerId)
                 .claim("reader_account", readerAccount)
                 // 签名哈希
                 .signWith(SignatureAlgorithm.HS256, APP_SECRET)
@@ -51,14 +51,12 @@ public class JwtUtils {
         return JwtToken;
     }
 
-    //生成token字符串的方法
     public static String getBookManagerJwtToken(Long bookManagerId, String readerAccount){
 
         String JwtToken = Jwts.builder()
                 // JWT的头信息
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("alg", "HS256")
-
                 // 设置过期时间
                 .setSubject("onlineCourse-user")
                 .setIssuedAt(new Date())
@@ -73,20 +71,17 @@ public class JwtUtils {
         return JwtToken;
     }
 
-    //生成token字符串的方法
     public static String getAdminJwtToken(Long adminId, String readerAccount){
-
         String JwtToken = Jwts.builder()
                 // JWT的头信息
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("alg", "HS256")
-
                 // 设置过期时间
                 .setSubject("onlineCourse-user")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE))
                 // 数据库中的字段
-                .claim("admin_id", adminId)  //设置token主体部分 ，存储用户信息
+                .claim("admin_id", adminId)
                 .claim("reader_account", readerAccount)
                 // 签名哈希
                 .signWith(SignatureAlgorithm.HS256, APP_SECRET)
@@ -152,5 +147,18 @@ public class JwtUtils {
         Jws<Claims> claimsJws = Jwts.parser().setSigningKey(APP_SECRET).parseClaimsJws(jwtToken);
         Claims claims = claimsJws.getBody();
         return (Integer)claims.get("book_manager_id");
+    }
+
+    /**
+     * 根据token字符串获取超级管理员id
+     * @param request
+     * @return
+     */
+    public static Integer getAdminIdByJwtToken(HttpServletRequest request) {
+        String jwtToken = request.getParameter("token");
+        if(StringUtils.isEmpty(jwtToken)) return null;
+        Jws<Claims> claimsJws = Jwts.parser().setSigningKey(APP_SECRET).parseClaimsJws(jwtToken);
+        Claims claims = claimsJws.getBody();
+        return (Integer)claims.get("admin_id");
     }
 }
