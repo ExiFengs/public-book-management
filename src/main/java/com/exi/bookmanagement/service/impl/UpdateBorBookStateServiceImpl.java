@@ -17,7 +17,7 @@ import java.util.List;
  * Copyright: Copyright (c) 2021 Asiainfo
  *
  * @ClassName: com.exi.bookmanagement.service.impl.UpdateBorBookStateServiceImpl
- * @Description: 该类的功能描述
+ * @Description: 定时调度任务
  * @version: v1.0.0
  * @author: Fengsx
  * @date: 2021/1/29 17:16
@@ -27,13 +27,20 @@ import java.util.List;
  * ----------------------------------------------------------
  * 2021/1/29    Fengsx     v1.0.0      修改原因
  */
+
 @Service
 @Slf4j
 public class UpdateBorBookStateServiceImpl implements IUpdateBorBookStateService {
     @Autowired
     private BorrowBookHisMapper borrowBookHisMapper;
 
-    //每月每天凌晨3点触发
+    /**
+     * @Author fengsx
+     * @Description //每月每天凌晨3点触发,更新读者借书后是否有逾期
+     * @Date  10:09
+     * @Param []
+     * @return int
+     **/
     @Scheduled(cron = "0 0 3 * * ?")
     @Override
     public int updateBookState() throws ParseException {

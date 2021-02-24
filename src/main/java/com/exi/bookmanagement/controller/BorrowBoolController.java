@@ -60,6 +60,27 @@ public class BorrowBoolController {
     private IUpdateBorBookStateService updateBorBookStateService;
 
 
+    @ApiOperation("读者取消预约")
+    @GetMapping(value = "/cancelBorrowBook/{borBookId}")
+    public BorrowBookResponse cancelBorrowBook(@PathVariable("borBookId") Long borBookId) throws ParseException {
+        BorrowBookResponse borrowBookResponse = new BorrowBookResponse();
+        BorrowBookHis oneBorrowBookHisBean = borrowBookHisMapper.getOneBorrowBookHisBean(borBookId);
+        oneBorrowBookHisBean.setState(5);
+        try{
+            borrowBookHisMapper.updateBorrowBookHisBean(oneBorrowBookHisBean);
+            log.info("oneBorrowBookHisBean:{}",JSON.toJSONString(oneBorrowBookHisBean));
+            borrowBookResponse.setCode(20000);
+            borrowBookResponse.setMessage("取消预约成功~");
+            return borrowBookResponse;
+        }catch (Exception e){
+            e.printStackTrace();
+            borrowBookResponse.setCode(88888);
+            borrowBookResponse.setMessage("取消预约失败");
+            return borrowBookResponse;
+        }
+
+    }
+
     @ApiOperation("读者借书")
     @GetMapping(value = "/borrowBook/{borBookId}")
     public BorrowBookResponse borrowBook(@PathVariable("borBookId") Long borBookId) throws ParseException {
@@ -236,6 +257,7 @@ public class BorrowBoolController {
                 borrowBookHis.setExpectGetBackTime(expectGetBackTime1);
 
                 borrowBookHis.setBooleanLate(0);
+                //预约成功
                 borrowBookHis.setState(0);
                 borrowBookMapper.insertBorrowBookBean(borrowBook);
                 //获取插入自增主键的 id
