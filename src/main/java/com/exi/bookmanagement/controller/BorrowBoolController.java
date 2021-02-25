@@ -8,7 +8,6 @@ import com.exi.bookmanagement.mapper.BookMapper;
 import com.exi.bookmanagement.mapper.BorrowBookHisMapper;
 import com.exi.bookmanagement.mapper.BorrowBookMapper;
 import com.exi.bookmanagement.response.BorrowBookResponse;
-import com.exi.bookmanagement.service.IUpdateBorBookStateService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -55,9 +54,6 @@ public class BorrowBoolController {
 
     @Autowired
     private BookMapper bookMapper;
-
-    @Autowired
-    private IUpdateBorBookStateService updateBorBookStateService;
 
 
     @ApiOperation("读者取消预约")
@@ -173,7 +169,7 @@ public class BorrowBoolController {
         }
 
         // 如果在获取到数据之后就对数据进行转dto操作的话，会获取不到total数据，所以又定义了一个PageInfo类然后将数据进行属性复制，来获取数据
-        try {
+/*        try {
             //查询之前先更新一波借阅状态
             updateBorBookStateService.updateBookState();
 
@@ -182,7 +178,7 @@ public class BorrowBoolController {
             borrowBookResponse.setMessage("更新纸质图书库存失败啦");
             e.printStackTrace();
             return borrowBookResponse;
-        }
+        }*/
         PageInfo<BorrowBook> pageInfo1 = new PageInfo<>();
         BeanUtils.copyProperties(new PageInfo<>(borrowBookList), pageInfo1);
         log.info("封装后的 pageInfo:{}",JSON.toJSONString(pageInfo1));

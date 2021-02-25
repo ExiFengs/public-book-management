@@ -12,6 +12,15 @@ public class BorrowBookHis implements Serializable {
   private String giveBookTime;
   private String getBackBookTime;
   private String subscribeTime;
+  /**
+   * 1: '已还书',
+   * 2: '已逾期已还书',
+   * 3: '已逾期但未还书',
+   * 0: '已预约',
+   * 4: '已借书',
+   * 5: '已取消预约'
+   * 6: '预约逾期'
+   **/
   private long state;
 
   public String getSubscribeTime() {

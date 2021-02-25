@@ -43,6 +43,17 @@ public interface BorrowBookHisMapper {
     BorrowBookHis getOneBorrowBookHisBean(Long borBookId);
 
     /**
+     * 借书状态加一层筛选，状态为 4：已借书,0：已预约
+     **/
+    @Select("SELECT * FROM borrow_book_his WHERE state = 4")
+    @ResultMap(value = "borrowBookHisMap")
+    List<BorrowBookHis> getStateForFour();
+
+    @Select("SELECT * FROM borrow_book_his WHERE state = 0")
+    @ResultMap(value = "borrowBookHisMap")
+    List<BorrowBookHis> getStateForOne();
+
+    /**
      * 更新读者的借阅状态、还书时间、是否逾期
      **/
     @Update("UPDATE borrow_book_his " +

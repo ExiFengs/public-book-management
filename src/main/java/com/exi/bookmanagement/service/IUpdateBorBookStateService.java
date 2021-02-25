@@ -18,4 +18,7 @@ import java.text.ParseException;
  */
 public interface IUpdateBorBookStateService {
     int updateBookState() throws ParseException;
+
+    void updateSubscribeState()throws ParseException;
+
 }
