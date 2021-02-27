@@ -17,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -195,6 +196,12 @@ public class AppleBookController {
     @PostMapping("/addBook")
     public AppleBookResponse save(@RequestBody AppleBook book){
         AppleBookResponse appleBookResponse = new AppleBookResponse();
+        if (StringUtils.isEmpty(book.getBookPicture())){
+            log.info("你没有上传纸质图书照片");
+            appleBookResponse.setCode(888888);
+            appleBookResponse.setMessage("你没有上传纸质图书照片");
+            return appleBookResponse;
+        }
         try {
             //返回的 id 总为 1 ,result 影响条数, 代码是返回自增主键的？
             book.setState(0);

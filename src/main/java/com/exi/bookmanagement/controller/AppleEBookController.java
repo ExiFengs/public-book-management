@@ -17,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -114,7 +115,7 @@ public class AppleEBookController {
     }
 
 
-    @ApiOperation("分页查询纸质图书信息")
+    @ApiOperation("分页查询电子图书信息")
     @GetMapping(value = "/getBooksPage/{pageNum}/{pageSize}")
     public AppleEBookResponse getBooksPage(@PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize){
         Page<AppleEBook> pageInfo = PageHelper.startPage(pageNum, pageSize);
@@ -136,7 +137,7 @@ public class AppleEBookController {
         return appleEBookResponse;
     }
 
-    @ApiOperation("分页查询读者纸质图书信息")
+    @ApiOperation("分页查询读者电子图书信息")
     @GetMapping(value = "/getBooksPageById/{pageNum}/{pageSize}/{readerId}")
     public AppleEBookResponse getBooksPage(@PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize, @PathVariable("readerId")Long readerId){
         Page<AppleEBook> pageInfo = PageHelper.startPage(pageNum, pageSize);
@@ -158,7 +159,7 @@ public class AppleEBookController {
         return appleEBookResponse;
     }
 
-    @ApiOperation("按名称查询纸质图书信息")
+    @ApiOperation("按名称查询电子图书信息")
     @GetMapping(value = "/getBookLikeNameList/{bookName}")
     public AppleEBookResponse getBookLikeNameList(@PathVariable("bookName") String bookName){
         List<AppleEBook> appleBookList = appleEBookMapper.getEBookLikeNameList(bookName);
@@ -170,7 +171,7 @@ public class AppleEBookController {
         return appleEBookResponse;
     }
 
-    @ApiOperation("获取所有纸质图书信息")
+    @ApiOperation("获取所有电子图书信息")
     @GetMapping("/getBooks")
     public AppleEBookResponse getBooks() {
         List<AppleEBook> appleBookList=appleEBookMapper.getAllEBookBean();
@@ -181,7 +182,7 @@ public class AppleEBookController {
         return appleEBookResponse;
     }
 
-    @ApiOperation("按id查询纸质图书信息")
+    @ApiOperation("按id查询电子图书信息")
     @GetMapping(value = "/getBookById/{bookId}")
     public AppleEBookResponse getBookById(@PathVariable("bookId") Long bookId) {
         AppleEBook appleEBook =appleEBookMapper.getOneEBookBeanById(bookId);
@@ -192,10 +193,16 @@ public class AppleEBookController {
         return appleEBookResponse;
     }
 
-    @ApiOperation("添加纸质图书信息")
+    @ApiOperation("添加电子图书信息")
     @PostMapping("/addBook")
     public AppleEBookResponse save(@RequestBody AppleEBook book){
         AppleEBookResponse appleEBookResponse = new AppleEBookResponse();
+        if (StringUtils.isEmpty(book.getEBookPicture())){
+            log.info("你没有上传电子图书照片");
+            appleEBookResponse.setCode(888888);
+            appleEBookResponse.setMessage("你没有上传电子图书照片");
+            return appleEBookResponse;
+        }
         try {
             //返回的 id 总为 1 ,result 影响条数, 代码是返回自增主键的？
             book.setState(0);
@@ -210,12 +217,12 @@ public class AppleEBookController {
                 return null;
             }
         }catch (Exception e){
-            log.info("添加纸质图书信息出问题啦");
+            log.info("添加电子图书信息出问题啦");
         }
         return appleEBookResponse;
     }
 
-    @ApiOperation("更新纸质图书信息")
+    @ApiOperation("更新电子图书信息")
     @PutMapping(value="/updateBook")
     public AppleEBookResponse update(@RequestBody AppleEBook book) {
         AppleEBookResponse appleEBookResponse = new AppleEBookResponse();
@@ -238,12 +245,12 @@ public class AppleEBookController {
                 return null;
             }
         }catch (Exception e){
-            log.info("更新纸质图书信息出问题啦");
+            log.info("更新电子图书信息出问题啦");
         }
         return appleEBookResponse;
     }
 
-    @ApiOperation("删除纸质图书信息")
+    @ApiOperation("删除电子图书信息")
     @DeleteMapping(value="/deleteBook/{id}")
     public AppleEBookResponse delete(@PathVariable("id") Long id) {
         AppleEBookResponse appleEBookResponse = new AppleEBookResponse();
@@ -258,7 +265,7 @@ public class AppleEBookController {
                 return null;
             }
         }catch (Exception e){
-            log.info("删除纸质图书信息出问题啦");
+            log.info("删除电子图书信息出问题啦");
         }
         return appleEBookResponse;
     }
