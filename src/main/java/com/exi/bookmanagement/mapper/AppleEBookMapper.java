@@ -33,6 +33,7 @@ public interface AppleEBookMapper {
             @Result(property = "categoryId", column = "category_id"),
             @Result(property = "state", column = "state"),
             @Result(property = "readerId", column = "reader_id"),
+            @Result(property = "refusalReason", column = "refusal_reason"),
             @Result(column="category_id",property="category",
                     one=@One(select="com.exi.bookmanagement.mapper.CategoryMapper.getOneCategoryById")),
             @Result(column="reader_id",property="reader",
@@ -62,7 +63,8 @@ public interface AppleEBookMapper {
 
     @Update("UPDATE apple_e_book SET e_book_author=#{eBookAuthor},e_book_name=#{eBookName}," +
             "e_book_picture=#{eBookPicture}, e_book_isbn=#{eBookIsbn}, e_book_intro=#{eBookIntro}," +
-            "e_book_press=#{eBookPress}, e_book_file_url=#{eBookFileUrl}, category_id=#{categoryId}" +
+            "e_book_press=#{eBookPress}, e_book_file_url=#{eBookFileUrl}, category_id=#{categoryId}, " +
+            "refusal_reason=#{refusalReason}" +
             " WHERE e_book_id =#{eBookId}")
     int updateEBookBean(AppleEBook eBook);
 

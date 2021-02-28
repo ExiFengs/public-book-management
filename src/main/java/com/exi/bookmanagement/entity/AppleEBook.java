@@ -18,7 +18,16 @@ public class AppleEBook implements Serializable {
   private long readerId;
   private Category category;
   private Reader reader;
+  private String refusalReason;
 
+
+  public String getRefusalReason() {
+    return refusalReason;
+  }
+
+  public void setRefusalReason(String refusalReason) {
+    this.refusalReason = refusalReason;
+  }
 
   public Reader getReader() {
     return reader;

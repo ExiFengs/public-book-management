@@ -237,9 +237,9 @@ public class BorrowBoolController {
                 String giveBookTime = sdf.format(time);
                 borrowBookHis.setSubscribeTime(giveBookTime);
                 Book oneBookBeanById = bookMapper.getOneBookBeanById(bookId);
-                if (oneBookBeanById.getBookRepertory() < borBookNum){
+                if (oneBookBeanById.getBookRepertory() < borBookNum || borBookNum == 0){
                     borrowBookResponse.setCode(88888);
-                    borrowBookResponse.setMessage("借阅数量大于库存啦");
+                    borrowBookResponse.setMessage("借阅数量不能大于库存且库存不能为0");
                     return borrowBookResponse;
                 }
                 borrowBookHis.setBorBookNum(borBookNum);
