@@ -239,7 +239,7 @@ public class BorrowBoolController {
                 Book oneBookBeanById = bookMapper.getOneBookBeanById(bookId);
                 if (oneBookBeanById.getBookRepertory() < borBookNum || borBookNum == 0){
                     borrowBookResponse.setCode(88888);
-                    borrowBookResponse.setMessage("借阅数量不能大于库存且库存不能为0");
+                    borrowBookResponse.setMessage("借阅数量不能大于库存且库存不能为哦");
                     return borrowBookResponse;
                 }
                 borrowBookHis.setBorBookNum(borBookNum);
