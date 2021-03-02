@@ -64,7 +64,7 @@ public interface AppleEBookMapper {
     @Update("UPDATE apple_e_book SET e_book_author=#{eBookAuthor},e_book_name=#{eBookName}," +
             "e_book_picture=#{eBookPicture}, e_book_isbn=#{eBookIsbn}, e_book_intro=#{eBookIntro}," +
             "e_book_press=#{eBookPress}, e_book_file_url=#{eBookFileUrl}, category_id=#{categoryId}, " +
-            "refusal_reason=#{refusalReason}" +
+            " refusal_reason=#{refusalReason}" +
             " WHERE e_book_id =#{eBookId}")
     int updateEBookBean(AppleEBook eBook);
 
@@ -75,6 +75,7 @@ public interface AppleEBookMapper {
     @ResultMap(value = "EbookMap")
     List<AppleEBook> getEBookLikeNameList(String eBookName);
 
-    @Update("UPDATE apple_e_book SET state=#{state} WHERE e_book_id = #{eBookId}")
+    @Update("UPDATE apple_e_book SET state=#{state}, " +
+            "refusal_reason=#{refusalReason} WHERE e_book_id = #{eBookId}")
     int updateEBookBeanByState(AppleEBook appleBook);
 }

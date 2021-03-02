@@ -196,10 +196,10 @@ public class AppleBookController {
     @PostMapping("/addBook")
     public AppleBookResponse save(@RequestBody AppleBook book){
         AppleBookResponse appleBookResponse = new AppleBookResponse();
-        if (StringUtils.isEmpty(book.getBookPicture())){
-            log.info("你没有上传纸质图书照片");
+        if (StringUtils.isEmpty(book.getBookPicture()) || book.getBookRepertory() == 0){
+            log.info("你没有上传纸质图书照片,库存为 0");
             appleBookResponse.setCode(888888);
-            appleBookResponse.setMessage("你没有上传纸质图书照片");
+            appleBookResponse.setMessage("你没有上传纸质图书照片或者库存为 0");
             return appleBookResponse;
         }
         try {

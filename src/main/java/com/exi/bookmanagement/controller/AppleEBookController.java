@@ -52,7 +52,7 @@ public class AppleEBookController {
     @Autowired
     private EBookMapper eBookMapper;
 
-    @ApiOperation("上架纸质书籍")
+    @ApiOperation("上架电子书籍")
     @PutMapping(value = "/putAway")
     public AppleEBookResponse putAway(@RequestBody AppleEBook appleEBook){
         AppleEBookResponse appleEBookResponse = new AppleEBookResponse();
@@ -91,10 +91,11 @@ public class AppleEBookController {
         return appleEBookResponse;
     }
 
-    @ApiOperation("拒绝上架纸质书籍")
+    @ApiOperation("拒绝上架电子书籍")
     @PutMapping(value = "/refuse")
     public AppleEBookResponse refuse(@RequestBody AppleEBook appleEBook){
         AppleEBookResponse appleEBookResponse = new AppleEBookResponse();
+        log.info("appleEbook:{}",JSON.toJSONString(appleEBook));
         appleEBook.setState(2);
         try{
             int i = appleEBookMapper.updateEBookBeanByState(appleEBook);
